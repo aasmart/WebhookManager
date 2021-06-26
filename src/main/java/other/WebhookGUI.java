@@ -2,7 +2,8 @@ package other;
 
 import events.Startup;
 import guis.MainConsole;
-import guis.TokenPopUp;
+import guis.popups.NoGuildsPopUp;
+import guis.popups.TokenPopUp;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -12,11 +13,9 @@ import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.util.Enumeration;
 
 public class WebhookGUI {
     public static final String BASE_URL = "https://discord.com/api/v9";
@@ -26,8 +25,6 @@ public class WebhookGUI {
     public MainConsole MAIN_CONSOLE;
 
     public WebhookGUI() {
-        // TODO Mac support
-
         // Read bot token
         String token = readToken();
         if(token.length() == 0)

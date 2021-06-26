@@ -1,8 +1,7 @@
 package events;
 
 import guis.MainConsole;
-import guis.NoGuildsPopUp;
-import net.dv8tion.jda.api.events.ReadyEvent;
+import guis.popups.NoGuildsPopUp;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

@@ -1,13 +1,15 @@
-package guis;
+package guis.popups;
 
 import events.Startup;
+import guis.JPanelEssentials;
+import guis.RoundedBorder;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
 
-public class NoGuildsPopUp extends JPanelEssentials{
+public class NoGuildsPopUp extends JPanelEssentials {
     public NoGuildsPopUp() {
         setTitle("The Bot is Currently in No Guilds!");
         setSize(500, 250);
@@ -35,9 +37,10 @@ public class NoGuildsPopUp extends JPanelEssentials{
 
         JButton refresh = new JButton("Refresh");
         refresh.setBackground(BLURPLE);
-        refresh.setBorder(BorderFactory.createEmptyBorder());
+        refresh.setBorder(new RoundedBorder(Color.BLACK, 0, 16, 0));
         refresh.setForeground(WHITE);
-        refresh.setFont(new Font("Calibri",Font.BOLD,24));
+        refresh.setFont(new Font("Calibri",Font.BOLD,20));
+        addHoverBrightnessChange(refresh, .25f);
 
         refresh.addActionListener(action -> {
             this.dispose();
@@ -48,12 +51,13 @@ public class NoGuildsPopUp extends JPanelEssentials{
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weighty = .8;
         gbc.weightx = 1;
-
         explanation.add(text, gbc);
+
         gbc.weighty = .2;
         gbc.gridy = 1;
-
+        gbc.insets = new Insets(0, 20, 20, 20);
         explanation.add(refresh, gbc);
+
         add(explanation);
         setVisible(true);
     }

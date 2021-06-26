@@ -1,6 +1,8 @@
-package guis;
+package guis.popups;
 
 import events.Startup;
+import guis.JPanelEssentials;
+import guis.RoundedBorder;
 import other.WebhookGUI;
 
 import javax.swing.*;
@@ -86,6 +88,7 @@ public class TokenPopUp extends JPanelEssentials {
         submit.setBorder(new RoundedBorder(Color.BLACK, 0, 16, 0));
         submit.setForeground(WHITE);
         submit.setFont(new Font("Calibri",Font.BOLD,20));
+        addHoverBrightnessChange(submit, .25f);
 
         submit.addActionListener(action -> {
             String token = tokenField.getText();
