@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+}
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation group: 'org.json', name: 'json', version: '20210307'
+    implementation("net.dv8tion:JDA:4.3.0_281")
+}
+
