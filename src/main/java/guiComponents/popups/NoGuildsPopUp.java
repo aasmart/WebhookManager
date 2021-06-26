@@ -1,8 +1,8 @@
-package guis.popups;
+package guiComponents.popups;
 
 import events.Startup;
-import guis.JPanelEssentials;
-import guis.RoundedBorder;
+import guiComponents.JPanelEssentials;
+import guiComponents.RoundedBorder;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
@@ -37,7 +37,7 @@ public class NoGuildsPopUp extends JPanelEssentials {
 
         JButton refresh = new JButton("Refresh");
         refresh.setBackground(BLURPLE);
-        refresh.setBorder(new RoundedBorder(Color.BLACK, 0, 16, 0));
+        refresh.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
         refresh.setForeground(WHITE);
         refresh.setFont(new Font("Calibri",Font.BOLD,20));
         addHoverBrightnessChange(refresh, .25f);

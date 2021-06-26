@@ -1,5 +1,7 @@
-package guis;
+package guiComponents.guis;
 
+import guiComponents.JPanelEssentials;
+import guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
 import other.Webhook;
 import other.WebhookGUI;
@@ -93,7 +95,7 @@ public class MainConsole extends JPanelEssentials {
         addButton.setFocusable(false);
         addHoverBrightnessChange(addButton, .25f);
 
-        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,0,16, 0);
+        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,0,16);
         addButton.setBorder(roundedBorder);
 
         addButton.addActionListener(event -> {
@@ -140,16 +142,16 @@ public class MainConsole extends JPanelEssentials {
             e.printStackTrace();
         }
 
-        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,0,16, 0);
+        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,0,16);
         refresh.setBorder(roundedBorder);
 
-        refresh.addActionListener(action -> {
+        refresh.addActionListener(action ->
             WebhookGUI.GUI.BOT.getGuilds().get(0).retrieveWebhooks().queue(webhooks -> {
                         if (webhooks.size() != 0)
                             WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.list, webhooks.stream().map(hook -> new Webhook(hook.getName(), hook.getToken(), hook.getId(), hook.getChannel().getId())).collect(Collectors.toList()));
                     }
-            );
-        });
+            )
+        );
 
         return refresh;
     }
@@ -172,7 +174,7 @@ public class MainConsole extends JPanelEssentials {
             e.printStackTrace();
         }
 
-        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,0,16, 0);
+        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,0,16);
         refresh.setBorder(roundedBorder);
 
         refresh.addActionListener(action -> {

@@ -1,7 +1,9 @@
-package guis;
+package guiComponents.guis;
 
+import guiComponents.JPanelEssentials;
+import guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
-import other.LimitDocumentFilter;
+import guiComponents.LimitDocumentFilter;
 import other.Webhook;
 import other.WebhookGUI;
 
@@ -18,7 +20,6 @@ public class WebhookCreateConsole extends JPanelEssentials {
     private JTextField webhookNameBox;
     private File avatarFile;
     private JComboBox<String> channelIDField;
-//    private JTextField channelIDField;
     private JTextField guildIDField;
 
     public WebhookCreateConsole() {
@@ -196,7 +197,7 @@ public class WebhookCreateConsole extends JPanelEssentials {
         selectAvatarButton.setBackground(BLURPLE);
         selectAvatarButton.setForeground(WHITE);
         selectAvatarButton.setFont(new Font("Calibri",Font.BOLD,16));
-        selectAvatarButton.setBorder(new RoundedBorder(Color.BLACK, 0, 4, 0));
+        selectAvatarButton.setBorder(new RoundedBorder(Color.BLACK, 0, 4));
         addHoverBrightnessChange(selectAvatarButton, .25f);
         selectAvatarButton.setFocusable(false);
 
@@ -320,7 +321,7 @@ public class WebhookCreateConsole extends JPanelEssentials {
         createWebhook.setBackground(BLURPLE);
         createWebhook.setForeground(WHITE);
         createWebhook.setFont(new Font("Calibri", Font.BOLD, 40));
-        createWebhook.setBorder(new RoundedBorder(MID_GRAY, 0, 16, 0));
+        createWebhook.setBorder(new RoundedBorder(MID_GRAY, 0, 16));
         createWebhook.setFocusable(false);
         addHoverBrightnessChange(createWebhook, .25f);
 

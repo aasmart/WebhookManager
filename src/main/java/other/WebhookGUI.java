@@ -1,9 +1,8 @@
 package other;
 
 import events.Startup;
-import guis.MainConsole;
-import guis.popups.NoGuildsPopUp;
-import guis.popups.TokenPopUp;
+import guiComponents.guis.MainConsole;
+import guiComponents.popups.TokenPopUp;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;

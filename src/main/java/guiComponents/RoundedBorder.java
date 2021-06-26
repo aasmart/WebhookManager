@@ -1,4 +1,4 @@
-package guis;
+package guiComponents;
 
 import javax.swing.border.AbstractBorder;
 import java.awt.*;
@@ -9,16 +9,14 @@ public class RoundedBorder extends AbstractBorder {
     private final Color color;
     private final int thickness;
     private final int radii;
-    private final int pointerSize;
     private final Insets insets;
     private final BasicStroke stroke;
     private final int strokePad;
     RenderingHints hints;
 
-    public RoundedBorder(Color color, int thickness, int radii, int pointerSize) {
+    public RoundedBorder(Color color, int thickness, int radii) {
         this.thickness = thickness;
         this.radii = radii;
-        this.pointerSize = pointerSize;
         this.color = color;
 
         stroke = new BasicStroke(thickness);
@@ -27,7 +25,7 @@ public class RoundedBorder extends AbstractBorder {
         hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int pad = radii + strokePad;
-        int bottomPad = pad + pointerSize + strokePad;
+        int bottomPad = pad + strokePad;
         insets = new Insets(pad, pad, bottomPad, pad);
     }
 
@@ -45,7 +43,7 @@ public class RoundedBorder extends AbstractBorder {
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
         Graphics2D g2 = (Graphics2D) g;
 
-        int bottomLineY = height - thickness - pointerSize;
+        int bottomLineY = height - thickness;
 
         RoundRectangle2D.Double bubble = new RoundRectangle2D.Double(strokePad, strokePad, width - thickness, bottomLineY, radii, radii);
 

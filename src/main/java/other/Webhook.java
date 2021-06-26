@@ -1,10 +1,9 @@
 package other;
 
-import com.iwebpp.crypto.TweetNaclFast;
-import guis.JPanelEssentials;
-import guis.RoundedBorder;
-import guis.WebhookConsole;
-import guis.WebhookCreateConsole;
+import guiComponents.JPanelEssentials;
+import guiComponents.RoundedBorder;
+import guiComponents.guis.WebhookConsole;
+import guiComponents.guis.WebhookCreateConsole;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -72,7 +71,7 @@ public class Webhook extends JPanelEssentials {
         webhookPanel.setBackground(DARK_GRAY);
         addHoverBrightnessChange(webhookPanel, .25f);
 
-        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,2,16, 0);
+        AbstractBorder roundedBorder = new RoundedBorder(NOT_QUITE_BLACK,2,16);
 
         webhookPanel.setBorder(roundedBorder);
 
@@ -206,7 +205,7 @@ public class Webhook extends JPanelEssentials {
         load.setFont(new Font("Calibri",Font.PLAIN,48));
         load.setFocusable(false);
         addHoverBrightnessChange(load, .25f);
-        load.setBorder(new RoundedBorder(Color.RED,0,16, 0));
+        load.setBorder(new RoundedBorder(Color.RED,0,16));
 
         try {
             URL resource = getClass().getResource("/arrowright.png");
@@ -234,7 +233,7 @@ public class Webhook extends JPanelEssentials {
         JButton deleteButton = new JButton();
         deleteButton.setBackground(RED);
         deleteButton.setForeground(WHITE);
-        deleteButton.setBorder(new RoundedBorder(MID_GRAY,0,16, 0));
+        deleteButton.setBorder(new RoundedBorder(MID_GRAY,0,16));
         deleteButton.setFont(new Font("Calibri",Font.BOLD,40));
         addHoverBrightnessChange(deleteButton, .25f);
         deleteButton.setFocusable(false);

@@ -1,15 +1,15 @@
-package guis;
+package guiComponents.guis;
 
+import guiComponents.JPanelEssentials;
+import guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
-import other.LimitDocumentFilter;
+import guiComponents.LimitDocumentFilter;
 import other.Webhook;
 import other.WebhookGUI;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.net.URL;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -203,7 +203,7 @@ public class WebhookConsole extends JPanelEssentials {
         sendMessage.setBackground(BLURPLE);
         sendMessage.setForeground(WHITE);
         sendMessage.setFont(new Font("Calibri",Font.BOLD,40));
-        sendMessage.setBorder(new RoundedBorder(Color.BLACK, 0, 16, 0));
+        sendMessage.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
         sendMessage.setFocusable(false);
         addHoverBrightnessChange(sendMessage, .25f);
 

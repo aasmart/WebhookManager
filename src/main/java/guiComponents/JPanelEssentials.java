@@ -1,5 +1,6 @@
-package guis;
+package guiComponents;
 
+import guiComponents.guis.WebhookCreateConsole;
 import other.WebhookGUI;
 
 import javax.imageio.ImageIO;
@@ -24,12 +25,6 @@ public class JPanelEssentials extends JFrame {
         padding.setBackground(color);
         return padding;
     }
-
-    public enum DimensionType {
-        HEIGHT,
-        WIDTH
-    }
-
 
     public static <T extends JComponent> void addHoverBrightnessChange(T component, float percentBrightnessChange) {
         component.addMouseListener(new MouseListener() {
@@ -79,7 +74,7 @@ public class JPanelEssentials extends JFrame {
         JButton cancelButton = new JButton();
         cancelButton.setBackground(RED);
         cancelButton.setForeground(WHITE);
-        cancelButton.setBorder(new RoundedBorder(MID_GRAY,0,16, 0));
+        cancelButton.setBorder(new RoundedBorder(MID_GRAY,0,16));
         cancelButton.setFont(new Font("Calibri",Font.BOLD,40));
         addHoverBrightnessChange(cancelButton, .25f);
         cancelButton.setFocusable(false);

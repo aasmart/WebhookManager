@@ -1,8 +1,7 @@
-package guis.popups;
+package guiComponents.popups;
 
-import events.Startup;
-import guis.JPanelEssentials;
-import guis.RoundedBorder;
+import guiComponents.JPanelEssentials;
+import guiComponents.RoundedBorder;
 import other.WebhookGUI;
 
 import javax.swing.*;
@@ -85,7 +84,7 @@ public class TokenPopUp extends JPanelEssentials {
 
         JButton submit = new JButton("Submit Token");
         submit.setBackground(BLURPLE);
-        submit.setBorder(new RoundedBorder(Color.BLACK, 0, 16, 0));
+        submit.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
         submit.setForeground(WHITE);
         submit.setFont(new Font("Calibri",Font.BOLD,20));
         addHoverBrightnessChange(submit, .25f);

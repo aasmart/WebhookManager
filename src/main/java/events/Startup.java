@@ -1,7 +1,7 @@
 package events;
 
-import guis.MainConsole;
-import guis.popups.NoGuildsPopUp;
+import guiComponents.guis.MainConsole;
+import guiComponents.popups.NoGuildsPopUp;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +20,4 @@ public class Startup extends ListenerAdapter {
         }
         WebhookGUI.GUI.MAIN_CONSOLE = new MainConsole();
     }
-
-    //public void
 }
