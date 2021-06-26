@@ -45,12 +45,10 @@ public class WebhookGUI {
         }
     }
 
-    public static void main(String[] args) {
-
-    }
+    public static void main(String[] args) { }
 
     public static String readToken() {
-        String tokenLocation = System.getProperty("user.home") + "\\AppData\\Local\\WebhookManager\\bot_token.secret";
+        String tokenLocation = System.getProperty("user.home") + "\\WebhookManager\\bot_token.secret";
         BufferedReader reader = null;
         String token = "";
         try {
@@ -72,7 +70,7 @@ public class WebhookGUI {
 
     @SuppressWarnings("unused")
     public static boolean writeToken(String token) {
-        String tokenLocation = System.getProperty("user.home") + "\\AppData\\Local\\WebhookManager\\bot_token.secret";
+        String tokenLocation = System.getProperty("user.home") + "\\WebhookManager\\bot_token.secret";
         File f = new File(tokenLocation);
         BufferedWriter writer = null;
         try {

@@ -205,10 +205,8 @@ public class Webhook extends JPanelEssentials {
         load.setForeground(WHITE);
         load.setFont(new Font("Calibri",Font.PLAIN,48));
         load.setFocusable(false);
-
-        AbstractBorder roundedBorder = new RoundedBorder(Color.RED,0,16, 0);
-
-        load.setBorder(roundedBorder);
+        addHoverBrightnessChange(load, .25f);
+        load.setBorder(new RoundedBorder(Color.RED,0,16, 0));
 
         try {
             URL resource = getClass().getResource("/arrowright.png");
