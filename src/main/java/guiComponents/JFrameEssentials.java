@@ -117,8 +117,8 @@ public class JFrameEssentials extends JFrame {
 
         // Add action listener for once the button is pressed
         cancelButton.addActionListener(event -> {
-            frame.dispose();
             WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
+            frame.dispose();
         });
 
         // Created GBC for formatting
