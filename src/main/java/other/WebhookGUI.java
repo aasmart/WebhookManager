@@ -6,23 +6,32 @@ import guiComponents.popups.TokenPopUp;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import okhttp3.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
 
+/**
+ * The main class for the Webhook Manager, housing the bot and the {@link MainConsole}
+ */
 public class WebhookGUI {
-    public static final String BASE_URL = "https://discord.com/api/v9";
-
+    /**
+     * The bot assigned to the WebhookGUI
+     */
     public JDA BOT;
-    public static WebhookGUI GUI = new WebhookGUI();
+
+    /**
+     * The WebhookGUI's {@link MainConsole}
+     */
     public MainConsole MAIN_CONSOLE;
 
+    /**
+     * The main WebhookGUI object
+     */
+    public static WebhookGUI GUI = new WebhookGUI();
+
+    /**
+     * The constructor for setting up the WebhookGUI
+     */
     public WebhookGUI() {
         // Read bot token
         String token = readToken();
@@ -43,10 +52,18 @@ public class WebhookGUI {
 
     public static void main(String[] args) { }
 
+    /**
+     * Reads the bot token from the save file
+     *
+     * @return A {@link String} containing the bot token
+     */
     public static String readToken() {
+        // Get token file location and instantiate other variables
         String tokenLocation = System.getProperty("user.home") + "\\WebhookManager\\bot_token.secret";
         BufferedReader reader = null;
         String token = "";
+
+        // Attempt to read token
         try {
             reader = new BufferedReader(new FileReader(tokenLocation));
             token = reader.readLine();
@@ -64,10 +81,19 @@ public class WebhookGUI {
         return token;
     }
 
+    /**
+     * Saves the bot token to the save file
+     *
+     * @param token The token to save
+     * @return If writing the token was successful
+     */
     @SuppressWarnings("unused")
     public static boolean writeToken(String token) {
+        // Create token location
         String tokenLocation = System.getProperty("user.home") + "\\WebhookManager\\bot_token.secret";
         File f = new File(tokenLocation);
+
+        // Attempt to write token
         BufferedWriter writer = null;
         try {
             if(!f.isFile()) {
@@ -92,29 +118,4 @@ public class WebhookGUI {
         return true;
     }
 
-    public static boolean sendMessage(String username, String avatar, String message, String id, String token) throws IOException {
-        JSONObject body = new JSONObject();
-        body.put("allowed_mentions", new JSONObject().put("parse", new JSONArray().putAll(new String[]{"users", "roles", "everyone"})));
-
-        body.put("content", message);
-        if(username != null)
-            body.put("username", username);
-        if(avatar != null) {
-            URL url = new URL(avatar);
-            BufferedImage img = ImageIO.read(url);
-            if(img != null)
-                body.put("avatar_url", avatar);
-        }
-
-        // Post Request
-        RequestBody formBody = RequestBody.create(body.toString(), MediaType.parse("application/json; charset=utf-8"));
-
-        Request request = new Request.Builder()
-                .url(BASE_URL + "/webhooks" + "/" + id + "/" + token)
-                .post(formBody)
-                .build();
-
-        Call call = new OkHttpClient().newCall(request);
-        return call.execute().isSuccessful();
-    }
 }

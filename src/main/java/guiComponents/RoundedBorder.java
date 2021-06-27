@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 
+/**
+ * A {@link AbstractBorder} for creating a rounded border
+ */
 public class RoundedBorder extends AbstractBorder {
     private final Color color;
     private final int thickness;
@@ -14,6 +17,13 @@ public class RoundedBorder extends AbstractBorder {
     private final int strokePad;
     RenderingHints hints;
 
+    /**
+     * Creates the rounded border
+     *
+     * @param color The color of the border outline
+     * @param thickness The thickness of the border outline
+     * @param radii The radius of the rounded border
+     */
     public RoundedBorder(Color color, int thickness, int radii) {
         this.thickness = thickness;
         this.radii = radii;
@@ -51,7 +61,7 @@ public class RoundedBorder extends AbstractBorder {
 
         g2.setRenderingHints(hints);
 
-        // Paint the BG color of the parent
+        // Paint the background color of the parent
         Component parent  = c.getParent();
         if (parent != null) {
             Color background = parent.getBackground();
