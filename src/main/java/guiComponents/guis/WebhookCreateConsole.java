@@ -35,11 +35,6 @@ public class WebhookCreateConsole extends JFrameEssentials {
      */
     private JComboBox<String> channelIDField;
 
-    /**
-     * The {@link JTextField} for the Guild ID field
-     */
-    private JTextField guildIDField;
-
     public WebhookCreateConsole() {
         // Basic settings for JFrame
         setTitle("Webhook Creator");
@@ -384,7 +379,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
         field.add(label);
         field.add(Box.createRigidArea(new Dimension(0,5)));
 
-        guildIDField = new JTextField();
+        JTextField guildIDField = new JTextField();
         ((AbstractDocument) guildIDField.getDocument()).setDocumentFilter(new LimitDocumentFilter(100));
         guildIDField.setBackground(GRAY);
         guildIDField.setForeground(NOT_QUITE_BLACK);
@@ -429,7 +424,6 @@ public class WebhookCreateConsole extends JFrameEssentials {
             // Get username, Channel ID, and Guild ID
             String username = webhookNameBox.getText();
             String channelID = String.valueOf(channelIDField.getSelectedItem()).split(":")[1];
-            String guildID = guildIDField.getText();
 
             // Do checks for fields
             if (username.length() == 0)

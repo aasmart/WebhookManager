@@ -10,8 +10,6 @@ import other.WebhookGUI;
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * The console for managing {@link other.Webhook}s
@@ -296,6 +294,7 @@ public class WebhookConsole extends JFrameEssentials {
                 new Thread(() -> {
                     try {
                         // Sends message if sending the message was successful
+                        // TODO setting to disable
                         if(DiscordAPI.sendMessage(username, avatarURL.getText().length() > 0 ? avatarURL.getText() : null, message, id, token))
                             JOptionPane.showMessageDialog(this, "Your message was sent!");
                         else
