@@ -229,7 +229,8 @@ public class MainConsole extends JFrameEssentials {
 
         // Add action listener for loading the settings panel
         settings.addActionListener(action -> {
-
+            new SettingsConsole();
+            setEnabled(false);
         });
 
         return settings;
