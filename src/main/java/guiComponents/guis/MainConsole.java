@@ -157,7 +157,7 @@ public class MainConsole extends JFrameEssentials {
         addButton.setBackground(BLURPLE);
         addButton.setForeground(WHITE);
         addButton.setFocusable(false);
-        addHoverBrightnessChange(addButton, .25f);
+        setHoverBrightnessChange(addButton, .25f);
         addButton.setBorder(new RoundedBorder(NOT_QUITE_BLACK,0,16));
 
         // Add action listener for creating the new webhooks once clicking the button
@@ -180,7 +180,7 @@ public class MainConsole extends JFrameEssentials {
         refresh.setBackground(BLURPLE);
         refresh.setForeground(WHITE);
         refresh.setFocusable(false);
-        addHoverBrightnessChange(refresh, .25f);
+        setHoverBrightnessChange(refresh, .25f);
         refresh.setBorder(new RoundedBorder(NOT_QUITE_BLACK,0,16));
 
         // Load icon
@@ -213,7 +213,7 @@ public class MainConsole extends JFrameEssentials {
         settings.setBackground(BLURPLE);
         settings.setForeground(WHITE);
         settings.setFocusable(false);
-        addHoverBrightnessChange(settings, .25f);
+        setHoverBrightnessChange(settings, .25f);
         settings.setBorder(new RoundedBorder(NOT_QUITE_BLACK,0,16));
 
         // Load icon

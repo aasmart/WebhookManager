@@ -266,7 +266,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
         selectAvatarButton.setForeground(WHITE);
         selectAvatarButton.setFont(new Font("Calibri",Font.BOLD,16));
         selectAvatarButton.setBorder(new RoundedBorder(Color.BLACK, 0, 4));
-        addHoverBrightnessChange(selectAvatarButton, .25f);
+        setHoverBrightnessChange(selectAvatarButton, .25f);
         selectAvatarButton.setFocusable(false);
 
         // File chooser
@@ -422,7 +422,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
         createWebhook.setFont(new Font("Calibri", Font.BOLD, 40));
         createWebhook.setBorder(new RoundedBorder(MID_GRAY, 0, 16));
         createWebhook.setFocusable(false);
-        addHoverBrightnessChange(createWebhook, .25f);
+        setHoverBrightnessChange(createWebhook, .25f);
 
         // Add the action listener to the create button for creating the Webhook on click
         createWebhook.addActionListener(event -> {
