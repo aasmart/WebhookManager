@@ -2,6 +2,7 @@ package guiComponents.guis;
 
 import guiComponents.JFrameEssentials;
 import guiComponents.RoundedBorder;
+import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
 import guiComponents.LimitDocumentFilter;
 import other.Webhook;
@@ -12,6 +13,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -36,11 +38,13 @@ public class WebhookCreateConsole extends JFrameEssentials {
     private JComboBox<String> channelIDField;
 
     /**
-     * The {@link JTextField} for the Guild ID field
+     * The ID of the {@link net.dv8tion.jda.api.entities.Guild} the {@link Webhook} is being created in
      */
-    private JTextField guildIDField;
+    private final long guildID;
 
-    public WebhookCreateConsole() {
+    public WebhookCreateConsole(long guildID) {
+        this.guildID = guildID;
+
         // Basic settings for JFrame
         setTitle("Webhook Creator");
         setSize(1100, 600);
@@ -129,51 +133,39 @@ public class WebhookCreateConsole extends JFrameEssentials {
         createPanel.setLayout(new GridBagLayout());
 
         // Create the JPanel that goes on the left
-        JPanel leftCreatePanel = new JPanel();
-        leftCreatePanel.setOpaque(false);
-        leftCreatePanel.setLayout(new BoxLayout(leftCreatePanel, BoxLayout.PAGE_AXIS));
-
-        // Initial GBC for formatting
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = .5;
+        JPanel topInputPanel = new JPanel();
+        topInputPanel.setOpaque(false);
+        topInputPanel.setLayout(new BoxLayout(topInputPanel, BoxLayout.LINE_AXIS));
 
         // Create the JPanel for the webhook name field and add it to the left panel
         JPanel webhookName = webhookName();
-        leftCreatePanel.add(webhookName);
+        topInputPanel.add(webhookName);
 
-        // Add distance between the first and next field
-        leftCreatePanel.add(Box.createRigidArea(new Dimension(0, 100)));
+        topInputPanel.add(Box.createRigidArea(new Dimension(30, 0)));
 
-        // Create the JPanel for the channel ID field and add it to the left panel
-        JPanel channelIDField = channelIDField();
-        leftCreatePanel.add(channelIDField);
+        // Create JPanel for the avatar field and add it to the right panel
+        JPanel avatarField = avatarField();
+        topInputPanel.add(avatarField);
 
         // Create the JPanel that goes on the right
         JPanel rightCreatePanel = new JPanel();
         rightCreatePanel.setOpaque(false);
         rightCreatePanel.setLayout(new BoxLayout(rightCreatePanel, BoxLayout.PAGE_AXIS));
 
-        // Create JPanel for the avatar field and add it to the right panel
-        JPanel avatarField = avatarField();
-        rightCreatePanel.add(avatarField, gbc);
+        // Create the JPanel for the channel ID field and add it to the right panel
+        JPanel channelIDField = channelIDField();
+        rightCreatePanel.add(channelIDField);
 
-        // Add distance between the first and next field
-        rightCreatePanel.add(Box.createRigidArea(new Dimension(0, 100)));
-
-        // Create JPanel for the guild ID field and add it to the right panel
-        JPanel guildIDField = guildIDField();
-        rightCreatePanel.add(guildIDField);
-
-        // Update constraints and add right/left JPanels
+        // Initial GBC for formatting
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
-        gbc.gridx = 0;
-        gbc.insets = new Insets(0,30,0,0);
-        createPanel.add(leftCreatePanel, gbc);
-        gbc.gridx = 1;
+        gbc.weighty = 1;
         gbc.insets = new Insets(0,30,0,30);
+        createPanel.add(topInputPanel, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(30,30,0,30);
         createPanel.add(rightCreatePanel, gbc);
 
         return createPanel;
@@ -187,17 +179,23 @@ public class WebhookCreateConsole extends JFrameEssentials {
     @NotNull
     private JPanel webhookName() {
         // The main JPanel
-        JPanel field = new JPanel();
-        field.setBackground(DARK_GRAY);
-        field.setLayout(new BoxLayout(field, BoxLayout.PAGE_AXIS));
+        JPanel nameField = new JPanel();
+        nameField.setBackground(DARK_GRAY);
+        nameField.setLayout(new BoxLayout(nameField, BoxLayout.PAGE_AXIS));
 
         // Create the JLabel for the title and formatting
-        JLabel label = new JLabel("Webhook Name");
+        JLabel label = new JLabel("Webhook Name", SwingConstants.CENTER);
         label.setFont(new Font("Calibri",Font.BOLD,36));
         label.setForeground(WHITE);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        field.add(label);
-        field.add(Box.createRigidArea(new Dimension(0,5)));
+
+        // JPanel for title
+        JPanel labelPanel = new JPanel(new BorderLayout());
+        labelPanel.setOpaque(false);
+        labelPanel.add(label, BorderLayout.CENTER);
+        labelPanel.setPreferredSize(new Dimension(200, 40));
+
+        // Add title to main panel
+        nameField.add(labelPanel);
 
         // Create the field for entering the webhook name and formatting
         webhookNameBox = new JTextField();
@@ -216,9 +214,9 @@ public class WebhookCreateConsole extends JFrameEssentials {
         textScroller.setPreferredSize(new Dimension(0, 60));
 
         // Add scroll pane to the main panel
-        field.add(textScroller);
+        nameField.add(textScroller);
 
-        return field;
+        return nameField;
     }
 
     /**
@@ -234,12 +232,18 @@ public class WebhookCreateConsole extends JFrameEssentials {
         avatarPanel.setLayout(new BoxLayout(avatarPanel, BoxLayout.PAGE_AXIS));
 
         // Create the JLabel to be the title, and formatting
-        JLabel label = new JLabel("Avatar File");
+        JLabel label = new JLabel("Avatar Image", SwingConstants.CENTER);
         label.setFont(new Font("Calibri",Font.BOLD,36));
         label.setForeground(WHITE);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        avatarPanel.add(label);
-        avatarPanel.add(Box.createRigidArea(new Dimension(0,5)));
+
+        // JPanel for title
+        JPanel labelPanel = new JPanel(new BorderLayout());
+        labelPanel.setOpaque(false);
+        labelPanel.add(label, BorderLayout.CENTER);
+        labelPanel.setPreferredSize(new Dimension(200, 40));
+
+        // Add title to main panel
+        avatarPanel.add(labelPanel);
 
         // Add the sub JPanel for the file fields
         JPanel subPanel = new JPanel();
@@ -301,15 +305,18 @@ public class WebhookCreateConsole extends JFrameEssentials {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = .8;
         gbc.weighty = 1;
-        gbc.gridx = 0;
         gbc.gridy = 0;
         subPanel.add(avatarFileScroll, gbc);
 
+        // JPanel for button
+        JPanel avatarButtonPanel = new JPanel(new BorderLayout());
+        avatarButtonPanel.setOpaque(false);
+        avatarButtonPanel.add(selectAvatarButton, BorderLayout.CENTER);
+
         // Update GBC and add the button
-        gbc.gridx = 1;
         gbc.weightx = .2;
         gbc.insets = new Insets(0, 10, 0, 0);
-        subPanel.add(selectAvatarButton, gbc);
+        subPanel.add(avatarButtonPanel, gbc);
 
         // Add the sub panel to the main panel
         avatarPanel.add(subPanel);
@@ -335,11 +342,14 @@ public class WebhookCreateConsole extends JFrameEssentials {
         label.setFont(new Font("Calibri",Font.BOLD,36));
         label.setForeground(WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setPreferredSize(new Dimension(200, 40));
         field.add(label);
-        field.add(Box.createRigidArea(new Dimension(0,5)));
 
         // Fetch the list of channels in the server
-        List<String> tempList = WebhookGUI.GUI.BOT.getGuilds().get(0).getTextChannels().stream().map(channel -> channel.getName() + ":" + channel.getId()).collect(Collectors.toList());
+        Guild g = WebhookGUI.GUI.BOT.getGuildById(guildID);
+        if(g == null)
+            throw new NullPointerException("Guild with ID " + guildID + " is null!");
+        List<String> tempList = g.getTextChannels().stream().map(channel -> channel.getName() + ":" + channel.getId()).collect(Collectors.toList());
         String[] channels = new String[tempList.size()];
 
         // Create the JComboBox for the channels, and formatting
@@ -360,44 +370,6 @@ public class WebhookCreateConsole extends JFrameEssentials {
         textScroller.setPreferredSize(new Dimension(0, 60));
 
         // Add text scroller to main panel
-        field.add(textScroller);
-
-        return field;
-    }
-
-    /**
-     * Creates the field for entering the guild the {@link Webhook} will be created in
-     * <html><b>THIS FIELD DOES NOT CURRENTLY WORK AND WILL LIKELY BE REMOVED IN THE FUTURE FOR A DIFFERENT "MODEL"</b></html>
-     * @return A {@link JPanel}
-     */
-    @NotNull
-    @SuppressWarnings("DuplicatedCode")
-    private JPanel guildIDField() {
-        JPanel field = new JPanel();
-        field.setOpaque(false);
-        field.setLayout(new BoxLayout(field, BoxLayout.PAGE_AXIS));
-
-        JLabel label = new JLabel("Guild ID");
-        label.setFont(new Font("Calibri",Font.BOLD,36));
-        label.setForeground(WHITE);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        field.add(label);
-        field.add(Box.createRigidArea(new Dimension(0,5)));
-
-        guildIDField = new JTextField();
-        ((AbstractDocument) guildIDField.getDocument()).setDocumentFilter(new LimitDocumentFilter(100));
-        guildIDField.setBackground(GRAY);
-        guildIDField.setForeground(NOT_QUITE_BLACK);
-        guildIDField.setFont(new Font("Calibri",Font.PLAIN,20));
-        guildIDField.setText("1234567890");
-        guildIDField.setHorizontalAlignment(JTextField.CENTER);
-
-        JScrollPane textScroller = new JScrollPane(guildIDField);
-        textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
-        textScroller.setBackground(GRAY);
-        textScroller.setBorder(BorderFactory.createEmptyBorder());
-        textScroller.setPreferredSize(new Dimension(0, 60));
-
         field.add(textScroller);
 
         return field;
@@ -426,10 +398,9 @@ public class WebhookCreateConsole extends JFrameEssentials {
 
         // Add the action listener to the create button for creating the Webhook on click
         createWebhook.addActionListener(event -> {
-            // Get username, Channel ID, and Guild ID
+            // Get username and Channel ID
             String username = webhookNameBox.getText();
             String channelID = String.valueOf(channelIDField.getSelectedItem()).split(":")[1];
-            String guildID = guildIDField.getText();
 
             // Do checks for fields
             if (username.length() == 0)
