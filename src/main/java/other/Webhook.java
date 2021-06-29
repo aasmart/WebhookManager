@@ -79,7 +79,7 @@ public class Webhook extends JFrameEssentials {
                     JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Avatar couldn't be set: " + e.getMessage());
                 }
 
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList();
+                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
             }, fail ->
                 JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, fail)
             );
@@ -325,7 +325,7 @@ public class Webhook extends JFrameEssentials {
         deleteButton.addActionListener(event ->
             WebhookGUI.GUI.BOT.retrieveWebhookById(id).queue(webhook -> {
                 webhook.delete().queue();
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList();
+                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
             })
         );
 

@@ -5,6 +5,7 @@ import guiComponents.LimitDocumentFilter;
 import guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
 import other.DiscordAPI;
+import other.Webhook;
 import other.WebhookGUI;
 
 import javax.swing.*;
@@ -64,7 +65,7 @@ public class WebhookConsole extends JFrameEssentials {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList();
+                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
                 WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
             }
         });
