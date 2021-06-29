@@ -64,14 +64,15 @@ public class RoundedBorder extends AbstractBorder {
         // Paint the background color of the parent
         Component parent  = c.getParent();
         if (parent != null) {
+            Graphics2D g2d = (Graphics2D)g2.create();
             Color background = parent.getBackground();
-            Rectangle rect = new Rectangle(0,0,width, height);
+            Rectangle rect = g2d.getClip().getBounds();
             Area borderRegion = new Area(rect);
             borderRegion.subtract(area);
-            g2.setClip(borderRegion);
-            g2.setColor(background);
-            g2.fillRect(0, 0, width, height);
-            g2.setClip(null);
+            g2d.setClip(borderRegion);
+            g2d.setColor(background);
+            g2d.fillRect(0, 0, width, height);
+            g2d.dispose();
         }
 
         g2.setColor(color);
