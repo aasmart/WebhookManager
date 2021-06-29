@@ -53,7 +53,6 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("OptionPane.background", NOT_QUITE_BLACK);
         UIManager.put("Panel.background", NOT_QUITE_BLACK);
         UIManager.put("OptionPane.messageForeground", WHITE);
-        UIManager.put("TabbedPane.background", NOT_QUITE_BLACK);
         UIManager.put("TabbedPane.foreground", WHITE);
         UIManager.put("TabbedPane.opaque", true);
         UIManager.put("TabbedPane.selected", MID_GRAY);
@@ -69,7 +68,7 @@ public class MainConsole extends JFrameEssentials {
 
         // Add various panels
         add(frameTitle(), BorderLayout.NORTH);
-        add(createPanel(), BorderLayout.SOUTH);
+        add(createButtonsPanel(), BorderLayout.SOUTH);
         add(createGuildPanel(), BorderLayout.CENTER);
         webhookList();
 
@@ -103,6 +102,8 @@ public class MainConsole extends JFrameEssentials {
         guildPanel = new JTabbedPane();
         guildPanel.setBorder(BorderFactory.createEmptyBorder());
         guildPanel.setFocusable(false);
+        guildPanel.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        guildPanel.setBackground(NOT_QUITE_BLACK);
 
         return guildPanel;
     }
@@ -126,6 +127,28 @@ public class MainConsole extends JFrameEssentials {
             // House the list panel inside a JScrollPane
             JScrollPane listScroll = new JScrollPane(webhookList);
             listScroll.setBorder(BorderFactory.createEmptyBorder());
+            listScroll.setBackground(NOT_QUITE_BLACK);
+
+            // Update Scrollbar styles
+            JScrollBar horizontalBar = listScroll.getHorizontalScrollBar();
+            horizontalBar.setUI(new BasicScrollBarUI() {
+                @Override
+                protected void configureScrollBarColors() {
+                    this.thumbColor = BLURPLE;
+                    this.trackColor = DARK_GRAY;
+                    this.thumbDarkShadowColor = DARK_GRAY;
+                }
+            });
+
+            JScrollBar verticalBar = listScroll.getVerticalScrollBar();
+            verticalBar.setUI(new BasicScrollBarUI() {
+                @Override
+                protected void configureScrollBarColors() {
+                    this.thumbColor = BLURPLE;
+                    this.trackColor = DARK_GRAY;
+                    this.thumbDarkShadowColor = DARK_GRAY;
+                }
+            });
 
             // Populate the panel with Webhooks
             webhookListPanels.put(guild.getIdLong(), webhookList);
@@ -145,7 +168,7 @@ public class MainConsole extends JFrameEssentials {
      *
      * @return A {@link JPanel} containing several buttons
      */
-    private JPanel createWebhookPanel() {
+    private JPanel createButtonsPanel() {
         // Initialize and format the JPanel for all the buttons
         JPanel addButtonPanel = new JPanel();
         addButtonPanel.setLayout(new GridBagLayout());
