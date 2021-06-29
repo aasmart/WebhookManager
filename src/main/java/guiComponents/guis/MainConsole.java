@@ -8,6 +8,7 @@ import other.WebhookGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.net.URL;
 import java.util.List;
@@ -42,7 +43,7 @@ public class MainConsole extends JFrameEssentials {
 
         // Add various panels
         add(frameTitle(), BorderLayout.NORTH);
-        add(createPanel(), BorderLayout.SOUTH);
+        add(createWebhookPanel(), BorderLayout.SOUTH);
         add(webhookList(), BorderLayout.CENTER);
 
         // Update UI
@@ -96,6 +97,27 @@ public class MainConsole extends JFrameEssentials {
         JScrollPane listScroll = new JScrollPane(webhookList);
         listScroll.setBorder(BorderFactory.createEmptyBorder());
 
+        // Update Scrollbar styles
+        JScrollBar horizontalBar = listScroll.getHorizontalScrollBar();
+        horizontalBar.setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = BLURPLE;
+                this.trackColor = DARK_GRAY;
+                this.thumbDarkShadowColor = DARK_GRAY;
+            }
+        });
+
+        JScrollBar verticalBar = listScroll.getVerticalScrollBar();
+        verticalBar.setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = BLURPLE;
+                this.trackColor = DARK_GRAY;
+                this.thumbDarkShadowColor = DARK_GRAY;
+            }
+        });
+
         // Populate the panel with Webhooks
         populateList();
 
@@ -109,7 +131,7 @@ public class MainConsole extends JFrameEssentials {
      *
      * @return A {@link JPanel} containing several buttons
      */
-    private JPanel createPanel() {
+    private JPanel createWebhookPanel() {
         // Initialize and format the JPanel for all the buttons
         JPanel addButtonPanel = new JPanel();
         addButtonPanel.setLayout(new GridBagLayout());
