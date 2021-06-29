@@ -99,7 +99,7 @@ public class TokenPopUp extends JFrameEssentials {
         submit.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
         submit.setForeground(WHITE);
         submit.setFont(new Font("Calibri",Font.BOLD,20));
-        addHoverBrightnessChange(submit, .25f);
+        setHoverBrightnessChange(submit, .25f);
 
         // Add action listener for submitting the token on click
         submit.addActionListener(action -> {

@@ -2,14 +2,17 @@ package guiComponents.guis;
 
 import guiComponents.JFrameEssentials;
 import guiComponents.RoundedBorder;
+import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
 import other.Webhook;
 import other.WebhookGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +22,19 @@ import java.util.stream.Collectors;
  */
 public class MainConsole extends JFrameEssentials {
     /**
-     * The JPanel for housing the list of {@link Webhook}s. Updated by {@link MainConsole#populateList()}
+     * A {@link JTabbedPane} with tabs linking to all the guids the given bot is in with their list of webhooks
      */
-    public JPanel webhookList;
+    public JTabbedPane guildPanel;
+
+    /**
+     * Maps a tab index to a guild ID
+     */
+    public LinkedHashMap<Integer, Long> tabGuildIDMap = new LinkedHashMap<>();
+
+    /**
+     * Maps a guild ID to a {@link JPanel} with a list of {@link Webhook}
+     */
+    public LinkedHashMap<Long, JPanel> webhookListPanels = new LinkedHashMap<>();
 
     /**
      * The basic constructor for building the Main Console
@@ -36,20 +49,31 @@ public class MainConsole extends JFrameEssentials {
         setBackground(NOT_QUITE_BLACK);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        // Update UI
+        UIManager.put("OptionPane.background", NOT_QUITE_BLACK);
+        UIManager.put("Panel.background", NOT_QUITE_BLACK);
+        UIManager.put("OptionPane.messageForeground", WHITE);
+        UIManager.put("TabbedPane.foreground", WHITE);
+        UIManager.put("TabbedPane.opaque", true);
+        UIManager.put("TabbedPane.selected", MID_GRAY);
+        UIManager.put("TabbedPane.contentBorderInsets", new Insets(0, 0, 0, 0));
+        UIManager.put("TabbedPane.light", NOT_QUITE_BLACK);
+        UIManager.put("TabbedPane.highlight", NOT_QUITE_BLACK);
+        UIManager.put("TabbedPane.shadow", NOT_QUITE_BLACK);
+        UIManager.put("TabbedPane.darkShadow", NOT_QUITE_BLACK);
+
         // Padding
         add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
         add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
 
         // Add various panels
         add(frameTitle(), BorderLayout.NORTH);
-        add(createPanel(), BorderLayout.SOUTH);
-        add(webhookList(), BorderLayout.CENTER);
 
-        // Update UI
-        UIManager.put("OptionPane.background", NOT_QUITE_BLACK);
-        UIManager.put("Panel.background", NOT_QUITE_BLACK);
-        UIManager.put("OptionPane.messageForeground", WHITE);
         UIManager.put("TextField.caretForeground", WHITE);
+      
+        add(createButtonsPanel(), BorderLayout.SOUTH);
+        add(createGuildPanel(), BorderLayout.CENTER);
+        webhookList();
 
         setVisible(true);
     }
@@ -77,32 +101,69 @@ public class MainConsole extends JFrameEssentials {
         return upper;
     }
 
+    private JTabbedPane createGuildPanel() {
+        guildPanel = new JTabbedPane();
+        guildPanel.setBorder(BorderFactory.createEmptyBorder());
+        guildPanel.setFocusable(false);
+        guildPanel.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        guildPanel.setBackground(NOT_QUITE_BLACK);
+
+        return guildPanel;
+    }
+
     /**
-     * The {@link JPanel} containing the list of all {@link Webhook}s found within the selected {@link net.dv8tion.jda.api.entities.Guild}.
-     * This list is populated by {@link MainConsole#populateList()}
-     *
-     * @return A {@link JPanel} containing a list of all {@link Webhook}s
+     * Initializes {@link MainConsole#guildPanel} containing the list of all {@link Webhook}s found within the selected
+     * {@link net.dv8tion.jda.api.entities.Guild}. This list is populated by {@link MainConsole#populateList(long)}
      */
-    private JPanel webhookList() {
-        // Create JFrame for housing the webhook list
-        JPanel mainFrame = new JPanel();
-        mainFrame.setLayout(new BorderLayout());
+    private void webhookList() {
+        // Get the list of guilds
+        List<Guild> guilds = WebhookGUI.GUI.BOT.getGuilds();
 
-        // Initialize the list JPanel and formatting
-        webhookList = new JPanel();
-        webhookList.setLayout(new GridBagLayout());
-        webhookList.setBackground(MID_GRAY);
+        // Iterate through the guilds and create
+        for(int i = 0; i < guilds.size(); i++) {
+            Guild guild = guilds.get(i);
+            // Initialize the list JPanel and formatting
+            JPanel webhookList = new JPanel();
+            webhookList.setLayout(new GridBagLayout());
+            webhookList.setBackground(MID_GRAY);
 
-        // House the list panel inside a JScrollPane
-        JScrollPane listScroll = new JScrollPane(webhookList);
-        listScroll.setBorder(BorderFactory.createEmptyBorder());
+            // House the list panel inside a JScrollPane
+            JScrollPane listScroll = new JScrollPane(webhookList);
+            listScroll.setBorder(BorderFactory.createEmptyBorder());
+            listScroll.setBackground(NOT_QUITE_BLACK);
 
-        // Populate the panel with Webhooks
-        populateList();
+            // Update Scrollbar styles
+            JScrollBar horizontalBar = listScroll.getHorizontalScrollBar();
+            horizontalBar.setUI(new BasicScrollBarUI() {
+                @Override
+                protected void configureScrollBarColors() {
+                    this.thumbColor = BLURPLE;
+                    this.trackColor = DARK_GRAY;
+                    this.thumbDarkShadowColor = DARK_GRAY;
+                }
+            });
 
-        // Add listScroll to mainFrame
-        mainFrame.add(listScroll, BorderLayout.CENTER);
-        return mainFrame;
+            JScrollBar verticalBar = listScroll.getVerticalScrollBar();
+            verticalBar.setUI(new BasicScrollBarUI() {
+                @Override
+                protected void configureScrollBarColors() {
+                    this.thumbColor = BLURPLE;
+                    this.trackColor = DARK_GRAY;
+                    this.thumbDarkShadowColor = DARK_GRAY;
+                }
+            });
+
+            // Populate the panel with Webhooks
+            webhookListPanels.put(guild.getIdLong(), webhookList);
+
+            // Create tab and formatting
+            guildPanel.addTab(guild.getName(), listScroll);
+            guildPanel.setBackgroundAt(i, BLURPLE);
+            populateList(guild.getIdLong());
+
+            // Add tab index to tabGuildIDMap
+            tabGuildIDMap.put(i, guild.getIdLong());
+        }
     }
 
     /**
@@ -110,7 +171,7 @@ public class MainConsole extends JFrameEssentials {
      *
      * @return A {@link JPanel} containing several buttons
      */
-    private JPanel createPanel() {
+    private JPanel createButtonsPanel() {
         // Initialize and format the JPanel for all the buttons
         JPanel addButtonPanel = new JPanel();
         addButtonPanel.setLayout(new GridBagLayout());
@@ -158,12 +219,12 @@ public class MainConsole extends JFrameEssentials {
         addButton.setBackground(BLURPLE);
         addButton.setForeground(WHITE);
         addButton.setFocusable(false);
-        addHoverBrightnessChange(addButton, .25f);
+        setHoverBrightnessChange(addButton, .25f);
         addButton.setBorder(new RoundedBorder(NOT_QUITE_BLACK,0,16));
 
         // Add action listener for creating the new webhooks once clicking the button
         addButton.addActionListener(event -> {
-            new WebhookCreateConsole();
+            new WebhookCreateConsole(tabGuildIDMap.get(guildPanel.getSelectedIndex()));
             setEnabled(false);
         });
 
@@ -181,7 +242,7 @@ public class MainConsole extends JFrameEssentials {
         refresh.setBackground(BLURPLE);
         refresh.setForeground(WHITE);
         refresh.setFocusable(false);
-        addHoverBrightnessChange(refresh, .25f);
+        setHoverBrightnessChange(refresh, .25f);
         refresh.setBorder(new RoundedBorder(NOT_QUITE_BLACK,0,16));
 
         // Load icon
@@ -197,7 +258,7 @@ public class MainConsole extends JFrameEssentials {
 
         // Add action listener for refreshing the Webhooks on press
         refresh.addActionListener(action ->
-            populateList()
+            webhookListPanels.keySet().forEach(this::populateList)
         );
 
         return refresh;
@@ -214,7 +275,7 @@ public class MainConsole extends JFrameEssentials {
         settings.setBackground(BLURPLE);
         settings.setForeground(WHITE);
         settings.setFocusable(false);
-        addHoverBrightnessChange(settings, .25f);
+        setHoverBrightnessChange(settings, .25f);
         settings.setBorder(new RoundedBorder(NOT_QUITE_BLACK,0,16));
 
         // Load icon
@@ -241,10 +302,13 @@ public class MainConsole extends JFrameEssentials {
      * Takes a {@link JPanel} and fills it with the list of all {@link Webhook}s in the selected {@link net.dv8tion.jda.api.entities.Guild}.
      * This method is asynchronous.
      */
-    public void populateList() {
+    public void populateList(long guildID) {
         // Attempt to fetch all the webhooks in the guild
-        // TODO Proper errors and multiple Guild support
-        WebhookGUI.GUI.BOT.getGuilds().get(0).retrieveWebhooks().queue(rawWebhooks -> {
+        Guild g = WebhookGUI.GUI.BOT.getGuildById(guildID);
+        // TODO Proper error
+        if(g == null)
+            return;
+        g.retrieveWebhooks().queue(rawWebhooks -> {
             // Create the list of Webhooks
             List<Webhook> webhooks = rawWebhooks.stream().map(hook -> new Webhook(hook.getName(), hook.getToken(), hook.getId(), hook.getChannel().getId())).collect(Collectors.toList());
 
@@ -255,12 +319,12 @@ public class MainConsole extends JFrameEssentials {
             gbc.weighty = 1;
 
             // Remove all components from the JPanel
-            webhookList.removeAll();
+            webhookListPanels.get(guildID).removeAll();
 
             // Add filler JPanel
             JPanel filler = new JPanel();
             filler.setOpaque(false);
-            webhookList.add(filler, gbc);
+            webhookListPanels.get(guildID).add(filler, gbc);
 
             // Update GBC constraints
             gbc.insets = new Insets(10, 10, 0, 10);
@@ -271,7 +335,7 @@ public class MainConsole extends JFrameEssentials {
             if(webhooks.size() != 0) {
                 for (int i = webhooks.size() - 1; i >= 0; i--) {
                     JPanel webhookPanel = webhooks.get(i).createPanel();
-                    webhookList.add(webhookPanel, gbc, 0);
+                    webhookListPanels.get(guildID).add(webhookPanel, gbc, 0);
                     Dimension tempDimension = webhookPanel.getPreferredSize();
                     tempDimension.height = 100;
                     webhookPanel.setPreferredSize(tempDimension);

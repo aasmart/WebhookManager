@@ -5,14 +5,12 @@ import guiComponents.LimitDocumentFilter;
 import guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
 import other.DiscordAPI;
+import other.Webhook;
 import other.WebhookGUI;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The console for managing {@link other.Webhook}s
@@ -37,11 +35,6 @@ public class WebhookConsole extends JFrameEssentials {
      * The token of the {@link other.Webhook} the user is currently managing
      */
     private final String token;
-
-    /**
-     * A {@link ScheduledExecutorService} for managing the change in color based on a success/failure in the send message button
-     */
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     /**
      * The basic constructor for the {@link WebhookConsole} {@link JFrame}.
@@ -72,7 +65,7 @@ public class WebhookConsole extends JFrameEssentials {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList();
+                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
                 WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
             }
         });
@@ -292,7 +285,7 @@ public class WebhookConsole extends JFrameEssentials {
         sendMessage.setFont(new Font("Calibri",Font.BOLD,40));
         sendMessage.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
         sendMessage.setFocusable(false);
-        addHoverBrightnessChange(sendMessage, .25f);
+        setHoverBrightnessChange(sendMessage, .25f);
 
         // Add action listener for once the button is pressed
         sendMessage.addActionListener(event -> {
@@ -306,17 +299,14 @@ public class WebhookConsole extends JFrameEssentials {
             else
                 new Thread(() -> {
                     try {
-                        // Sets the button's color depending on if the message send was successful
+                        // Sends message if sending the message was successful
+                        // TODO setting to disable
                         if(DiscordAPI.sendMessage(username, avatarURL.getText().length() > 0 ? avatarURL.getText() : null, message, id, token))
-                            sendMessage.setBackground(GREEN);
+                            JOptionPane.showMessageDialog(this, "Your message was sent!");
                         else
-                            sendMessage.setBackground(RED);
+                            JOptionPane.showMessageDialog(this, "Your message could not be sent! Consider checking the " +
+                                    "status of the bot and the webhook you are attempting to use.");
 
-                        // Schedules the color to change back
-                        executor.schedule(
-                                () -> sendMessage.setBackground(BLURPLE),
-                                3, TimeUnit.SECONDS
-                        );
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, e.getMessage());
                     }

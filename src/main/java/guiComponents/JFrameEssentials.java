@@ -44,7 +44,7 @@ public class JFrameEssentials extends JFrame {
      * @param percentBrightnessChange The percent change in brightness (ex. .25f, .5f)
      * @param <T> A generic that extends a {@link JComponent}
      */
-    public static <T extends JComponent> void addHoverBrightnessChange(T component, float percentBrightnessChange) {
+    public static <T extends JComponent> void setHoverBrightnessChange(T component, float percentBrightnessChange) {
         component.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -102,7 +102,7 @@ public class JFrameEssentials extends JFrame {
         cancelButton.setForeground(WHITE);
         cancelButton.setBorder(new RoundedBorder(MID_GRAY,0,16));
         cancelButton.setFont(new Font("Calibri",Font.BOLD,40));
-        addHoverBrightnessChange(cancelButton, .25f);
+        setHoverBrightnessChange(cancelButton, .25f);
         cancelButton.setFocusable(false);
 
         // Create button's icon

@@ -66,7 +66,7 @@ public class Webhook extends JFrameEssentials {
 
         // Channel null check
         if(channel == null) {
-            JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Cannot find the specified channel.");
+            JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Cannot find the specified channel. (It may have been deleted!)");
             return false;
         }
 
@@ -76,10 +76,10 @@ public class Webhook extends JFrameEssentials {
                 try {
                     webhook.getManager().setAvatar(Icon.from(avatar)).queue();
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Avatar couldn't be set.");
+                    JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Avatar couldn't be set: " + e.getMessage());
                 }
 
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList();
+                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
             }, fail ->
                 JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, fail)
             );
@@ -99,7 +99,7 @@ public class Webhook extends JFrameEssentials {
         JPanel webhookPanel = new JPanel();
         webhookPanel.setLayout(new GridBagLayout());
         webhookPanel.setBackground(DARK_GRAY);
-        addHoverBrightnessChange(webhookPanel, .25f);
+        setHoverBrightnessChange(webhookPanel, .25f);
         webhookPanel.setBorder(new RoundedBorder(NOT_QUITE_BLACK,2,16));
 
         // Create GBC for formatting
@@ -267,7 +267,7 @@ public class Webhook extends JFrameEssentials {
         load.setForeground(WHITE);
         load.setFont(new Font("Calibri",Font.PLAIN,48));
         load.setFocusable(false);
-        addHoverBrightnessChange(load, .25f);
+        setHoverBrightnessChange(load, .25f);
         load.setBorder(new RoundedBorder(Color.RED,0,16));
 
         // Get the button's icon
@@ -307,7 +307,7 @@ public class Webhook extends JFrameEssentials {
         deleteButton.setForeground(WHITE);
         deleteButton.setBorder(new RoundedBorder(MID_GRAY,0,16));
         deleteButton.setFont(new Font("Calibri",Font.BOLD,40));
-        addHoverBrightnessChange(deleteButton, .25f);
+        setHoverBrightnessChange(deleteButton, .25f);
         deleteButton.setFocusable(false);
 
         // Get the JButton's icon
@@ -325,7 +325,7 @@ public class Webhook extends JFrameEssentials {
         deleteButton.addActionListener(event ->
             WebhookGUI.GUI.BOT.retrieveWebhookById(id).queue(webhook -> {
                 webhook.delete().queue();
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList();
+                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
             })
         );
 

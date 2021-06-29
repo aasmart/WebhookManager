@@ -51,7 +51,7 @@ public class NoGuildsPopUp extends JFrameEssentials {
         refresh.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
         refresh.setForeground(WHITE);
         refresh.setFont(new Font("Calibri",Font.BOLD,20));
-        addHoverBrightnessChange(refresh, .25f);
+        setHoverBrightnessChange(refresh, .25f);
 
         // Add action listener for refreshing on click
         refresh.addActionListener(action -> {
