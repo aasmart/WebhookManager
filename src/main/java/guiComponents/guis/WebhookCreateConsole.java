@@ -1,10 +1,10 @@
 package guiComponents.guis;
 
 import guiComponents.JFrameEssentials;
+import guiComponents.LimitDocumentFilter;
 import guiComponents.RoundedBorder;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
-import guiComponents.LimitDocumentFilter;
 import other.Webhook;
 import other.WebhookGUI;
 
@@ -13,7 +13,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -180,7 +179,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
     private JPanel webhookName() {
         // The main JPanel
         JPanel nameField = new JPanel();
-        field.setOpaque(false);
+        nameField.setOpaque(false);
         nameField.setLayout(new BoxLayout(nameField, BoxLayout.PAGE_AXIS));
 
         // Create the JLabel for the title and formatting
@@ -271,7 +270,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
         selectAvatarButton.setBackground(BLURPLE);
         selectAvatarButton.setForeground(WHITE);
         selectAvatarButton.setFont(new Font("Calibri",Font.BOLD,16));
-        selectAvatarButton.setBorder(new RoundedBorder(Color.BLACK, 0, 4));
+        selectAvatarButton.setBorder(new RoundedBorder(DARK_GRAY, 2, 4));
         setHoverBrightnessChange(selectAvatarButton, .25f);
         selectAvatarButton.setFocusable(false);
 
@@ -368,7 +367,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
         // Create the JScrollPane for the combo box
         JScrollPane textScroller = new JScrollPane(channelIDField);
         textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
-        textScroller.setBackground(GRAY);
+        textScroller.setBackground(LIGHTER_MID_GRAY);
         textScroller.setBorder(BorderFactory.createEmptyBorder());
         textScroller.setPreferredSize(new Dimension(0, 60));
 

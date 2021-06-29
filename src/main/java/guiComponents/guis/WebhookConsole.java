@@ -5,7 +5,6 @@ import guiComponents.LimitDocumentFilter;
 import guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
 import other.DiscordAPI;
-import other.Webhook;
 import other.WebhookGUI;
 
 import javax.swing.*;

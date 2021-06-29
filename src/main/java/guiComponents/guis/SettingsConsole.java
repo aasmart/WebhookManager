@@ -31,7 +31,7 @@ public class SettingsConsole extends JFrameEssentials {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-            WebhookGUI.GUI.MAIN_CONSOLE.populateList();
+            WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
             WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
             }
         });

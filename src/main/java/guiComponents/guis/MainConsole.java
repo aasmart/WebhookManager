@@ -61,6 +61,7 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("TabbedPane.highlight", NOT_QUITE_BLACK);
         UIManager.put("TabbedPane.shadow", NOT_QUITE_BLACK);
         UIManager.put("TabbedPane.darkShadow", NOT_QUITE_BLACK);
+        UIManager.put("TextField.caretForeground", WHITE);
 
         // Padding
         add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
@@ -68,9 +69,6 @@ public class MainConsole extends JFrameEssentials {
 
         // Add various panels
         add(frameTitle(), BorderLayout.NORTH);
-
-        UIManager.put("TextField.caretForeground", WHITE);
-      
         add(createButtonsPanel(), BorderLayout.SOUTH);
         add(createGuildPanel(), BorderLayout.CENTER);
         webhookList();
