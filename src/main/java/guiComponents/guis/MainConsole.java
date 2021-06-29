@@ -9,6 +9,7 @@ import other.WebhookGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -144,7 +145,7 @@ public class MainConsole extends JFrameEssentials {
      *
      * @return A {@link JPanel} containing several buttons
      */
-    private JPanel createPanel() {
+    private JPanel createWebhookPanel() {
         // Initialize and format the JPanel for all the buttons
         JPanel addButtonPanel = new JPanel();
         addButtonPanel.setLayout(new GridBagLayout());
