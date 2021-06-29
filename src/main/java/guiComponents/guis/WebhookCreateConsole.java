@@ -125,7 +125,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
     private JPanel createPanel() {
         // Create main JPanel
         JPanel createPanel = new JPanel();
-        createPanel.setBackground(DARK_GRAY);
+        createPanel.setBackground(MID_GRAY);
         createPanel.setLayout(new GridBagLayout());
 
         // Create the JPanel that goes on the left
@@ -188,7 +188,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
     private JPanel webhookName() {
         // The main JPanel
         JPanel field = new JPanel();
-        field.setBackground(DARK_GRAY);
+        field.setOpaque(false);
         field.setLayout(new BoxLayout(field, BoxLayout.PAGE_AXIS));
 
         // Create the JLabel for the title and formatting
@@ -202,8 +202,9 @@ public class WebhookCreateConsole extends JFrameEssentials {
         // Create the field for entering the webhook name and formatting
         webhookNameBox = new JTextField();
         ((AbstractDocument)webhookNameBox.getDocument()).setDocumentFilter(new LimitDocumentFilter(80));
-        webhookNameBox.setBackground(GRAY);
-        webhookNameBox.setForeground(NOT_QUITE_BLACK);
+        webhookNameBox.setBackground(LIGHTER_MID_GRAY);
+        webhookNameBox.setForeground(WHITE);
+        webhookNameBox.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
         webhookNameBox.setFont(new Font("Calibri",Font.PLAIN,20));
         webhookNameBox.setText("Web Hooker");
         webhookNameBox.setHorizontalAlignment(JTextField.CENTER);
@@ -243,13 +244,14 @@ public class WebhookCreateConsole extends JFrameEssentials {
 
         // Add the sub JPanel for the file fields
         JPanel subPanel = new JPanel();
-        subPanel.setBackground(DARK_GRAY);
+        subPanel.setBackground(MID_GRAY);
         subPanel.setLayout(new GridBagLayout());
 
         // Creates the JTextField which will contain the name of the file, and formatting
         JTextField avatarFileName = new JTextField();
-        avatarFileName.setBackground(GRAY);
-        avatarFileName.setForeground(NOT_QUITE_BLACK);
+        avatarFileName.setBackground(LIGHTER_MID_GRAY);
+        avatarFileName.setForeground(WHITE);
+        avatarFileName.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
         avatarFileName.setFont(new Font("Calibri",Font.PLAIN,20));
         avatarFileName.setText("No file selected...");
         avatarFileName.setEditable(false);
@@ -344,8 +346,9 @@ public class WebhookCreateConsole extends JFrameEssentials {
 
         // Create the JComboBox for the channels, and formatting
         channelIDField = new JComboBox<>(tempList.toArray(channels));
-        channelIDField.setBackground(GRAY);
-        channelIDField.setForeground(NOT_QUITE_BLACK);
+        channelIDField.setBackground(LIGHTER_MID_GRAY);
+        channelIDField.setForeground(WHITE);
+        channelIDField.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
         channelIDField.setFont(new Font("Calibri",Font.PLAIN,20));
         channelIDField.setAlignmentX(JComboBox.CENTER_ALIGNMENT);
         JLabel comboLabel = ((JLabel)channelIDField.getRenderer());

@@ -22,6 +22,7 @@ public class JFrameEssentials extends JFrame {
     public static final Color GREEN = new Color(0x57F287);
     public static final Color RED = new Color(0xED4245);
     public static final Color MID_GRAY = new Color(0x36393F);
+    public static final Color LIGHTER_MID_GRAY = new Color(0x40444B);
 
     /**
      * Creates a JPanel with a background color

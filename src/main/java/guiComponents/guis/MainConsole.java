@@ -49,6 +49,7 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("OptionPane.background", NOT_QUITE_BLACK);
         UIManager.put("Panel.background", NOT_QUITE_BLACK);
         UIManager.put("OptionPane.messageForeground", WHITE);
+        UIManager.put("TextField.caretForeground", WHITE);
 
         setVisible(true);
     }
