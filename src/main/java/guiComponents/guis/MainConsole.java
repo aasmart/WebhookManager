@@ -42,6 +42,7 @@ public class MainConsole extends JFrameEssentials {
     public MainConsole() {
         // Setup basic console
         setTitle("Webhook Viewer");
+        setResizable(true);
         setSize(600, 700);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
@@ -164,7 +165,7 @@ public class MainConsole extends JFrameEssentials {
 
             // House the list panel inside a JScrollPane
             JScrollPane listScroll = new JScrollPane(webhookList);
-            listScroll.setBorder(BorderFactory.createEmptyBorder());
+            listScroll.setBorder(null);
             listScroll.setBackground(NOT_QUITE_BLACK);
 
             // Update Scrollbar styles

@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import other.WebhookGUI;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 
 public class SettingsConsole extends JFrameEssentials {
@@ -33,13 +34,17 @@ public class SettingsConsole extends JFrameEssentials {
         // Setup basic console
         settingsPanel = panel;
         settingsPanel.setBackground(NOT_QUITE_BLACK);
+        settingsPanel.setLayout(new BorderLayout());
+        settingsPanel.setBorder(null);
 
         // Main GUI Components
         settingsPanel.add(settingsPane(), BorderLayout.CENTER);
 
         // Padding
-        settingsPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
-        settingsPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        JPanel top = new JPanel();
+        top.setBackground(NOT_QUITE_BLACK);
+        top.setPreferredSize(new Dimension(0, 20));
+        settingsPanel.add(top, BorderLayout.NORTH);
 
         settingsPanel.setVisible(false);
     }
@@ -74,13 +79,22 @@ public class SettingsConsole extends JFrameEssentials {
      * @return A {@link JScrollPane}
      */
     private static JScrollPane settingsPane() {
-        JPanel settingsPanel = new JPanel(new GridBagLayout());
-        settingsPanel.setBorder(BorderFactory.createEmptyBorder());
+        JPanel settingsPanel = new JPanel(new BorderLayout());
+        settingsPanel.setBorder(BorderFactory.createMatteBorder(0,8,0,0, NOT_QUITE_BLACK));
         settingsPanel.setBackground(MID_GRAY);
 
         JScrollPane scrollPane = new JScrollPane(settingsPanel);
-        scrollPane.setBackground(MID_GRAY);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setBackground(null);
+        scrollPane.setBorder(null);
+
+        /*GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weighty = GridBagConstraints.RELATIVE;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;*/
+
+//        settingsPanel.add(new JPanel(), BorderLayout.CENTER);
 
         return scrollPane;
     }
