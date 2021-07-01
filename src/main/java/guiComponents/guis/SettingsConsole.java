@@ -8,35 +8,40 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SettingsConsole extends JFrameEssentials {
-    public SettingsConsole() {
+    /**
+     * If the settings console is currently open (True if so)
+     */
+    private static boolean isActive;
+
+    /**
+     * The current Settings Panel
+     */
+    private static JPanel settingsPanel;
+
+    /**
+     * The current Settings Title
+     */
+    private static JPanel settingsTitle;
+
+    /**
+     * Creates the Settings Console {@link JPanel} which houses all the settings for the application
+     * @param panel A {@link JPanel}
+     */
+    public static void buildSettingsConsole(JPanel panel) {
+        isActive = false;
+
         // Setup basic console
-        setTitle("Webhook Manager Settings");
-        setSize(600, 700);
-        setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
-        setBackground(NOT_QUITE_BLACK);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        settingsPanel = panel;
+        settingsPanel.setBackground(NOT_QUITE_BLACK);
 
         // Main GUI Components
-        add(frameTitle(), BorderLayout.NORTH);
-        add(settingsPane(), BorderLayout.CENTER);
+        settingsPanel.add(settingsPane(), BorderLayout.CENTER);
 
         // Padding
-        add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
-        add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        settingsPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
+        settingsPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
 
-        // Add various panels
-
-        // Create listener for window closing event
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-            WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
-            WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
-            }
-        });
-
-        setVisible(true);
+        settingsPanel.setVisible(false);
     }
 
     /**
@@ -44,7 +49,7 @@ public class SettingsConsole extends JFrameEssentials {
      * @return A {@link JPanel} with the title
      */
     @NotNull
-    private JPanel frameTitle() {
+    public static JPanel frameTitle() {
         // Create the JPanel for housing the JLabel
         JPanel upper = new JPanel();
         upper.setLayout(new BorderLayout());
@@ -56,13 +61,19 @@ public class SettingsConsole extends JFrameEssentials {
         upperText.setForeground(WHITE);
 
         // Add upperText to upper with formatting
-        upper.add(padding(NOT_QUITE_BLACK), BorderLayout.NORTH);
         upper.add(upperText, BorderLayout.CENTER);
+
+        settingsTitle = upper;
+        upper.setVisible(false);
 
         return upper;
     }
 
-    private JScrollPane settingsPane() {
+    /**
+     * Creates the panel housing the list of all settings
+     * @return A {@link JScrollPane}
+     */
+    private static JScrollPane settingsPane() {
         JPanel settingsPanel = new JPanel(new GridBagLayout());
         settingsPanel.setBorder(BorderFactory.createEmptyBorder());
         settingsPanel.setBackground(MID_GRAY);
@@ -72,5 +83,24 @@ public class SettingsConsole extends JFrameEssentials {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         return scrollPane;
+    }
+
+    /**
+     * Turns the settings panel on/off depending on its state
+     */
+    public static void toggleSettings() {
+        if(settingsPanel != null && isActive) {
+            settingsPanel.setVisible(false);
+            settingsTitle.setVisible(false);
+            WebhookGUI.GUI.MAIN_CONSOLE.revalidate();
+            WebhookGUI.GUI.MAIN_CONSOLE.repaint();
+            isActive = false;
+        } else if(settingsPanel != null) {
+            settingsPanel.setVisible(true);
+            settingsTitle.setVisible(true);
+            WebhookGUI.GUI.MAIN_CONSOLE.revalidate();
+            WebhookGUI.GUI.MAIN_CONSOLE.repaint();
+            isActive = true;
+        }
     }
 }

@@ -30,7 +30,7 @@ public class JFrameEssentials extends JFrame {
      * @param color The color to set the background to
      * @return A {@link JPanel}
      */
-    public JPanel padding(Color color) {
+    public static JPanel padding(Color color) {
         JPanel padding = new JPanel();
         padding.setBackground(color);
         return padding;

@@ -63,15 +63,43 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("TabbedPane.darkShadow", NOT_QUITE_BLACK);
         UIManager.put("TextField.caretForeground", WHITE);
 
+        // Panel for the webhook list and such
+        JPanel mainConsolePanel = new JPanel(new BorderLayout());
+        mainConsolePanel.setBackground(NOT_QUITE_BLACK);
+        mainConsolePanel.setBorder(BorderFactory.createEmptyBorder());
+
         // Padding
-        add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
-        add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        mainConsolePanel.add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
+        mainConsolePanel.add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
 
         // Add various panels
-        add(frameTitle(), BorderLayout.NORTH);
-        add(createButtonsPanel(), BorderLayout.SOUTH);
-        add(createGuildPanel(), BorderLayout.CENTER);
+        mainConsolePanel.add(frameTitle(), BorderLayout.NORTH);
+        mainConsolePanel.add(createButtonsPanel(), BorderLayout.SOUTH);
+
+        // Create JPanel for the center
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setBackground(NOT_QUITE_BLACK);
+        centerPanel.setBorder(BorderFactory.createEmptyBorder());
+
+        // GBC for center formatting
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = .6;
+        gbc.weighty = 1;
+
+        // Add webhook list
+        centerPanel.add(createGuildPanel(), gbc);
         webhookList();
+
+        // Add settings panel
+        gbc.weightx = .4;
+        JPanel settingPanel = new JPanel();
+        SettingsConsole.buildSettingsConsole(settingPanel);
+        centerPanel.add(settingPanel, gbc);
+
+        // Add various panels
+        mainConsolePanel.add(centerPanel, BorderLayout.CENTER);
+        add(mainConsolePanel);
 
         setVisible(true);
     }
@@ -83,9 +111,15 @@ public class MainConsole extends JFrameEssentials {
     @NotNull
     private JPanel frameTitle() {
         // Create the JPanel for housing the JLabel
-        JPanel upper = new JPanel();
-        upper.setLayout(new BorderLayout());
+        JPanel upper = new JPanel(new GridBagLayout());
         upper.setBackground(NOT_QUITE_BLACK);
+
+        // GBC for formatting
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = .6;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(20, 0, 0, 0);
 
         // Create the title JLabel
         JLabel upperText = new JLabel("Webhook Viewer",SwingConstants.CENTER);
@@ -93,8 +127,11 @@ public class MainConsole extends JFrameEssentials {
         upperText.setForeground(WHITE);
 
         // Add upperText to upper with formatting
-        upper.add(padding(NOT_QUITE_BLACK), BorderLayout.NORTH);
-        upper.add(upperText, BorderLayout.CENTER);
+        upper.add(upperText, gbc);
+
+        // Add Settings title
+        gbc.weightx = .4;
+        upper.add(SettingsConsole.frameTitle(), gbc);
 
         return upper;
     }
@@ -288,10 +325,9 @@ public class MainConsole extends JFrameEssentials {
         }
 
         // Add action listener for loading the settings panel
-        settings.addActionListener(action -> {
-            new SettingsConsole();
-            setEnabled(false);
-        });
+        settings.addActionListener(action ->
+            SettingsConsole.toggleSettings()
+        );
 
         return settings;
     }
