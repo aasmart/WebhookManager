@@ -65,7 +65,7 @@ public class MainConsole extends JFrameEssentials {
 
         // Panel for the webhook list and such
         JPanel mainConsolePanel = new JPanel(new BorderLayout());
-        mainConsolePanel.setBackground(NOT_QUITE_BLACK);
+        mainConsolePanel.setOpaque(false);
         mainConsolePanel.setBorder(BorderFactory.createEmptyBorder());
 
         // Padding
@@ -78,8 +78,8 @@ public class MainConsole extends JFrameEssentials {
 
         // Create JPanel for the center
         JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.setBackground(NOT_QUITE_BLACK);
-        centerPanel.setBorder(BorderFactory.createEmptyBorder());
+        centerPanel.setOpaque(false);
+        centerPanel.setBorder(BorderFactory.createLineBorder(NOT_QUITE_BLACK, 1));
 
         // GBC for center formatting
         GridBagConstraints gbc = new GridBagConstraints();
