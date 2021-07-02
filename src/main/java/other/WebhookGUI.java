@@ -1,5 +1,6 @@
 package other;
 
+import events.LeaveGuild;
 import events.Startup;
 import guiComponents.guis.MainConsole;
 import guiComponents.popups.TokenPopUp;
@@ -40,7 +41,10 @@ public class WebhookGUI {
 
         try {
             JDABuilder builder = JDABuilder.createDefault(token)
-                    .addEventListeners(new Startup())
+                    .addEventListeners(
+                            new Startup(),
+                            new LeaveGuild()
+                    )
                     .setRawEventsEnabled(true)
                     .setActivity(Activity.playing("with webhooks"));
 

@@ -3,6 +3,7 @@ package guiComponents.guis;
 import guiComponents.JFrameEssentials;
 import guiComponents.RoundedBorder;
 import guiComponents.popups.InvalidPermsPopUp;
+import guiComponents.popups.NoGuildsPopUp;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
 import other.Webhook;
@@ -308,8 +309,14 @@ public class MainConsole extends JFrameEssentials {
         // Attempt to fetch all the webhooks in the guild
         Guild g = WebhookGUI.GUI.BOT.getGuildById(guildID);
         // TODO Proper error
-        if(g == null)
-            return false;
+        if(g == null) {
+            if(WebhookGUI.GUI.BOT.getGuilds().size() == 0) {
+                WebhookGUI.GUI.MAIN_CONSOLE.dispose();
+                new NoGuildsPopUp();
+                return false;
+            }
+            return true;
+        }
         try {
             g.retrieveWebhooks().queue(rawWebhooks -> {
                 // Create the list of Webhooks
@@ -356,5 +363,14 @@ public class MainConsole extends JFrameEssentials {
             return false;
         }
         return true;
+    }
+
+    /**
+     * An overridden function for nulling out the disposed main console
+     */
+    @Override
+    public void dispose() {
+        super.dispose();
+        WebhookGUI.GUI.MAIN_CONSOLE = null;
     }
 }
