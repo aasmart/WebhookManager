@@ -2,6 +2,8 @@ package guiComponents.guis;
 
 import guiComponents.JFrameEssentials;
 import guiComponents.RoundedBorder;
+import guiComponents.popups.InvalidPermsPopUp;
+import guiComponents.popups.NoGuildsPopUp;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
 import other.Webhook;
@@ -85,7 +87,10 @@ public class MainConsole extends JFrameEssentials {
 
         // Add webhook list
         centerPanel.add(createGuildPanel(), gbc);
-        webhookList();
+        if(!webhookList()) {
+            WebhookGUI.GUI.MAIN_CONSOLE = null;
+            return;
+        }
 
         // Add settings panel
         gbc.weightx = .4;
@@ -150,7 +155,7 @@ public class MainConsole extends JFrameEssentials {
      * Initializes {@link MainConsole#guildPanel} containing the list of all {@link Webhook}s found within the selected
      * {@link net.dv8tion.jda.api.entities.Guild}. This list is populated by {@link MainConsole#populateList(long)}
      */
-    private void webhookList() {
+    private boolean webhookList() {
         // Get the list of guilds
         List<Guild> guilds = WebhookGUI.GUI.BOT.getGuilds();
 
@@ -194,11 +199,13 @@ public class MainConsole extends JFrameEssentials {
             // Create tab and formatting
             guildPanel.addTab(guild.getName(), listScroll);
             guildPanel.setBackgroundAt(i, BLURPLE);
-            populateList(guild.getIdLong());
+            if(!populateList(guild.getIdLong()))
+                return false;
 
             // Add tab index to tabGuildIDMap
             tabGuildIDMap.put(i, guild.getIdLong());
         }
+        return true;
     }
 
     /**
@@ -336,49 +343,71 @@ public class MainConsole extends JFrameEssentials {
      * Takes a {@link JPanel} and fills it with the list of all {@link Webhook}s in the selected {@link net.dv8tion.jda.api.entities.Guild}.
      * This method is asynchronous.
      */
-    public void populateList(long guildID) {
+    public boolean populateList(long guildID) {
         // Attempt to fetch all the webhooks in the guild
         Guild g = WebhookGUI.GUI.BOT.getGuildById(guildID);
         // TODO Proper error
-        if(g == null)
-            return;
-        g.retrieveWebhooks().queue(rawWebhooks -> {
-            // Create the list of Webhooks
-            List<Webhook> webhooks = rawWebhooks.stream().map(hook -> new Webhook(hook.getName(), hook.getToken(), hook.getId(), hook.getChannel().getId())).collect(Collectors.toList());
-
-            // Create GBC for formatting
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridwidth = GridBagConstraints.REMAINDER;
-            gbc.weightx = 1;
-            gbc.weighty = 1;
-
-            // Remove all components from the JPanel
-            webhookListPanels.get(guildID).removeAll();
-
-            // Add filler JPanel
-            JPanel filler = new JPanel();
-            filler.setOpaque(false);
-            webhookListPanels.get(guildID).add(filler, gbc);
-
-            // Update GBC constraints
-            gbc.insets = new Insets(10, 10, 0, 10);
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.weighty = GridBagConstraints.RELATIVE;
-
-            // Go through the list of webhooks and add them to the JPanel
-            if(webhooks.size() != 0) {
-                for (int i = webhooks.size() - 1; i >= 0; i--) {
-                    JPanel webhookPanel = webhooks.get(i).createPanel();
-                    webhookListPanels.get(guildID).add(webhookPanel, gbc, 0);
-                    Dimension tempDimension = webhookPanel.getPreferredSize();
-                    tempDimension.height = 100;
-                    webhookPanel.setPreferredSize(tempDimension);
-                }
+        if(g == null) {
+            if(WebhookGUI.GUI.BOT.getGuilds().size() == 0) {
+                WebhookGUI.GUI.MAIN_CONSOLE.dispose();
+                new NoGuildsPopUp();
+                return false;
             }
+            return true;
+        }
+        try {
+            g.retrieveWebhooks().queue(rawWebhooks -> {
+                // Create the list of Webhooks
+                List<Webhook> webhooks = rawWebhooks.stream().map(hook -> new Webhook(hook.getName(), hook.getToken(), hook.getId(), hook.getChannel().getId())).collect(Collectors.toList());
 
-            // Refresh the console to display update webhook list
-            getContentPane().validate();
-            getContentPane().repaint();
-        });
+                // Create GBC for formatting
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridwidth = GridBagConstraints.REMAINDER;
+                gbc.weightx = 1;
+                gbc.weighty = 1;
+
+                // Remove all components from the JPanel
+                webhookListPanels.get(guildID).removeAll();
+
+                // Add filler JPanel
+                JPanel filler = new JPanel();
+                filler.setOpaque(false);
+                webhookListPanels.get(guildID).add(filler, gbc);
+
+                // Update GBC constraints
+                gbc.insets = new Insets(10, 10, 0, 10);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.weighty = GridBagConstraints.RELATIVE;
+
+                // Go through the list of webhooks and add them to the JPanel
+                if (webhooks.size() != 0) {
+                    for (int i = webhooks.size() - 1; i >= 0; i--) {
+                        JPanel webhookPanel = webhooks.get(i).createPanel();
+                        webhookListPanels.get(guildID).add(webhookPanel, gbc, 0);
+                        Dimension tempDimension = webhookPanel.getPreferredSize();
+                        tempDimension.height = 100;
+                        webhookPanel.setPreferredSize(tempDimension);
+                    }
+                }
+
+              getContentPane().validate();
+              getContentPane().repaint();
+            }, fail ->
+                System.out.println(fail.getMessage())
+            );
+        } catch (Exception e) {
+            new InvalidPermsPopUp(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * An overridden function for nulling out the disposed main console
+     */
+    @Override
+    public void dispose() {
+        super.dispose();
+        WebhookGUI.GUI.MAIN_CONSOLE = null;
     }
 }

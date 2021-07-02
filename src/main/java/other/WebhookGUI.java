@@ -1,5 +1,6 @@
 package other;
 
+import events.LeaveGuild;
 import events.Startup;
 import guiComponents.guis.MainConsole;
 import guiComponents.popups.TokenPopUp;
@@ -35,12 +36,15 @@ public class WebhookGUI {
     public WebhookGUI() {
         // Read bot token
         String token = readToken();
-        if(token.length() == 0)
+        if(token == null || token.length() == 0)
             return;
 
         try {
             JDABuilder builder = JDABuilder.createDefault(token)
-                    .addEventListeners(new Startup())
+                    .addEventListeners(
+                            new Startup(),
+                            new LeaveGuild()
+                    )
                     .setRawEventsEnabled(true)
                     .setActivity(Activity.playing("with webhooks"));
 
@@ -67,6 +71,9 @@ public class WebhookGUI {
         try {
             reader = new BufferedReader(new FileReader(tokenLocation));
             token = reader.readLine();
+
+            if(token == null || token.length() == 0)
+                new TokenPopUp("No Token Found!");
         } catch (IOException e) {
             new TokenPopUp("No Token Found!");
         } finally {

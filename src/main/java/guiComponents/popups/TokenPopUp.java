@@ -25,6 +25,7 @@ public class TokenPopUp extends JFrameEssentials {
         setSize(600, 350);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create explanation JPanel
