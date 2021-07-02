@@ -136,9 +136,15 @@ public class MainConsole extends JFrameEssentials {
 
         // Add Settings title
         gbc.weightx = .4;
+        gbc.insets = new Insets(20, 0, 0, 0);
         upper.add(SettingsConsole.frameTitle(), gbc);
 
-        return upper;
+        // Add padding so the components are centered properly
+        JPanel paddingPanel = new JPanel(new BorderLayout());
+        paddingPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
+        paddingPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        paddingPanel.add(upper, BorderLayout.CENTER);
+        return paddingPanel;
     }
 
     private JTabbedPane createGuildPanel() {
@@ -171,6 +177,7 @@ public class MainConsole extends JFrameEssentials {
             JScrollPane listScroll = new JScrollPane(webhookList);
             listScroll.setBorder(null);
             listScroll.setBackground(NOT_QUITE_BLACK);
+            listScroll.setPreferredSize(new Dimension(0, 0)); // Don't ask... just don't
 
             // Update Scrollbar styles
             JScrollBar horizontalBar = listScroll.getHorizontalScrollBar();

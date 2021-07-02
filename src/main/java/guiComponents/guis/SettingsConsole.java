@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import other.WebhookGUI;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 
 public class SettingsConsole extends JFrameEssentials {
@@ -78,22 +77,13 @@ public class SettingsConsole extends JFrameEssentials {
      * @return A {@link JScrollPane}
      */
     private static JScrollPane settingsPane() {
-        JPanel settingsPanel = new JPanel(new BorderLayout());
+        JPanel settingsPanel = new JPanel(new GridBagLayout());
         settingsPanel.setBorder(BorderFactory.createMatteBorder(0,8,0,0, NOT_QUITE_BLACK));
         settingsPanel.setBackground(MID_GRAY);
 
         JScrollPane scrollPane = new JScrollPane(settingsPanel);
         scrollPane.setBorder(null);
         scrollPane.setBackground(MID_GRAY);
-
-        /*GridBagConstraints gbc = new GridBagConstraints();
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weighty = GridBagConstraints.RELATIVE;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;*/
-
-//        settingsPanel.add(new JPanel(), BorderLayout.CENTER);
 
         return scrollPane;
     }
