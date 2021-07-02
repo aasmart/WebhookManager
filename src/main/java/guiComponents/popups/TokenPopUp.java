@@ -66,11 +66,12 @@ public class TokenPopUp extends JFrameEssentials {
         JTextField tokenField = new JTextField();
         tokenField.setBackground(GRAY);
         tokenField.setForeground(NOT_QUITE_BLACK);
-        tokenField.setFont(new Font("Calibri",Font.PLAIN,20));
+        tokenField.setFont(new Font("Calibri",Font.PLAIN,18));
         tokenField.setBorder(BorderFactory.createEmptyBorder());
 
         // Create scrolling for token field
         JScrollPane tokenScroll = new JScrollPane(tokenField);
+        tokenScroll.setBackground(GRAY);
         tokenScroll.setBorder(BorderFactory.createLineBorder(MID_GRAY, 5));
 
         // Set scroll bar formatting

@@ -40,6 +40,7 @@ public class InvalidPermsPopUp extends JFrameEssentials {
 
         // Setup scroll pane
         JScrollPane scrollPane = new JScrollPane(text);
+        scrollPane.setBackground(NOT_QUITE_BLACK);
         scrollPane.setBorder(null);
 
         JScrollBar horizontalBar = scrollPane.getHorizontalScrollBar();
