@@ -1,5 +1,6 @@
 package other;
 
+import events.JoinGuild;
 import events.LeaveGuild;
 import events.Startup;
 import guiComponents.guis.MainConsole;
@@ -43,6 +44,7 @@ public class WebhookGUI {
             JDABuilder builder = JDABuilder.createDefault(token)
                     .addEventListeners(
                             new Startup(),
+                            new JoinGuild(),
                             new LeaveGuild()
                     )
                     .setRawEventsEnabled(true)

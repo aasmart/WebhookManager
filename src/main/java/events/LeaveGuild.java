@@ -12,7 +12,6 @@ import other.WebhookGUI;
 public class LeaveGuild extends ListenerAdapter {
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-        super.onGuildLeave(event);
         if(WebhookGUI.GUI.BOT.getGuilds().size() == 0) {
             WebhookGUI.GUI.MAIN_CONSOLE.dispose();
             new NoGuildsPopUp();
