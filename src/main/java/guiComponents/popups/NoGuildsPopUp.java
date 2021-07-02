@@ -20,7 +20,7 @@ public class NoGuildsPopUp extends JFrameEssentials {
     public NoGuildsPopUp() {
         // Set basic JFrame settings
         setTitle("The Bot is Currently in No Guilds!");
-        setSize(500, 250);
+        setSize(500, 350);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
         setResizable(false);
@@ -60,21 +60,40 @@ public class NoGuildsPopUp extends JFrameEssentials {
             Startup.attemptStartup();
         });
 
+        // Create JButton for attempting to refresh if the user added the bot to guilds
+        JButton changeToken = new JButton("Change Token");
+        changeToken.setBackground(BLURPLE);
+        changeToken.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
+        changeToken.setForeground(WHITE);
+        changeToken.setFont(new Font("Calibri",Font.BOLD,20));
+        setHoverBrightnessChange(changeToken, .25f);
+
+        // Add action listener for refreshing on click
+        changeToken.addActionListener(action -> {
+            this.dispose();
+            new TokenPopUp("Change Token");
+        });
+
         // Create GBC for formatting and add the text to the explanation panel
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = .8;
+        gbc.weighty = .7;
         gbc.weightx = 1;
         explanation.add(text, gbc);
 
         // Update constraints add add refresh button
-        gbc.weighty = .2;
+        gbc.weighty = .15;
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 20, 20, 20);
         explanation.add(refresh, gbc);
 
+        // Change token button
+        gbc.gridy = 2;
+        explanation.add(changeToken, gbc);
+
         // Add explanation the the JFrame
         add(explanation);
         setVisible(true);
+        getContentPane().repaint();
     }
 }
