@@ -35,7 +35,6 @@ public class SettingsConsole extends JFrameEssentials {
         settingsPanel = panel;
         settingsPanel.setBackground(NOT_QUITE_BLACK);
         settingsPanel.setLayout(new BorderLayout());
-        settingsPanel.setBorder(null);
 
         // Main GUI Components
         settingsPanel.add(settingsPane(), BorderLayout.CENTER);
@@ -43,7 +42,7 @@ public class SettingsConsole extends JFrameEssentials {
         // Padding
         JPanel top = new JPanel();
         top.setBackground(NOT_QUITE_BLACK);
-        top.setPreferredSize(new Dimension(0, 20));
+        top.setPreferredSize(new Dimension(0, 21));
         settingsPanel.add(top, BorderLayout.NORTH);
 
         settingsPanel.setVisible(false);
@@ -84,8 +83,8 @@ public class SettingsConsole extends JFrameEssentials {
         settingsPanel.setBackground(MID_GRAY);
 
         JScrollPane scrollPane = new JScrollPane(settingsPanel);
-        scrollPane.setBackground(null);
         scrollPane.setBorder(null);
+        scrollPane.setBackground(MID_GRAY);
 
         /*GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;

@@ -93,6 +93,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
         });
 
         setVisible(true);
+        getContentPane().repaint();
     }
 
     /**

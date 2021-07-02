@@ -43,12 +43,9 @@ public class MainConsole extends JFrameEssentials {
         // Setup basic console
         setTitle("Webhook Viewer");
         setResizable(true);
-        setSize(600, 700);
         setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(NOT_QUITE_BLACK);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        getContentPane().setBackground(NOT_QUITE_BLACK);
 
         // Update UI
         UIManager.put("OptionPane.background", NOT_QUITE_BLACK);
@@ -67,7 +64,6 @@ public class MainConsole extends JFrameEssentials {
         // Panel for the webhook list and such
         JPanel mainConsolePanel = new JPanel(new BorderLayout());
         mainConsolePanel.setOpaque(false);
-        mainConsolePanel.setBorder(BorderFactory.createEmptyBorder());
 
         // Padding
         mainConsolePanel.add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
@@ -79,8 +75,7 @@ public class MainConsole extends JFrameEssentials {
 
         // Create JPanel for the center
         JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.setOpaque(false);
-        centerPanel.setBorder(BorderFactory.createLineBorder(NOT_QUITE_BLACK, 1));
+        centerPanel.setBackground(null);
 
         // GBC for center formatting
         GridBagConstraints gbc = new GridBagConstraints();
@@ -100,9 +95,13 @@ public class MainConsole extends JFrameEssentials {
 
         // Add various panels
         mainConsolePanel.add(centerPanel, BorderLayout.CENTER);
-        add(mainConsolePanel);
+        getContentPane().add(mainConsolePanel);
 
+        setSize(700, 700);
+        setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
+        getContentPane().repaint();
     }
 
     /**
@@ -212,7 +211,7 @@ public class MainConsole extends JFrameEssentials {
         JPanel addButtonPanel = new JPanel();
         addButtonPanel.setLayout(new GridBagLayout());
         addButtonPanel.setBackground(NOT_QUITE_BLACK);
-        addButtonPanel.setBorder(BorderFactory.createEmptyBorder());
+        addButtonPanel.setBorder(BorderFactory.createLineBorder(NOT_QUITE_BLACK, 1));
 
         // Get the "Add Button"
         JButton addButton = createButton();
@@ -378,8 +377,8 @@ public class MainConsole extends JFrameEssentials {
             }
 
             // Refresh the console to display update webhook list
-            validate();
-            repaint();
+            getContentPane().validate();
+            getContentPane().repaint();
         });
     }
 }
