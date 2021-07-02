@@ -73,11 +73,12 @@ public class Webhook extends JFrameEssentials {
         // Attempt to create the webhook
         try {
             channel.createWebhook(name).queue(webhook -> {
-                try {
-                    webhook.getManager().setAvatar(Icon.from(avatar)).queue();
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Avatar couldn't be set: " + e.getMessage());
-                }
+                if(avatar != null)
+                    try {
+                        webhook.getManager().setAvatar(Icon.from(avatar)).queue();
+                    } catch (IOException e) {
+                        JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Avatar couldn't be set: " + e.getMessage());
+                    }
 
                 WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
             }, fail ->

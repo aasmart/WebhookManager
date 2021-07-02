@@ -407,8 +407,6 @@ public class WebhookCreateConsole extends JFrameEssentials {
                 JOptionPane.showMessageDialog(this, "Username must be longer than 0 characters.");
             else if (channelID.length() == 0)
                 JOptionPane.showMessageDialog(this, "Must specify channel.");
-            else if (avatarFile == null)
-                JOptionPane.showMessageDialog(this, "Must have avatar file.");
             else {
                 if (Webhook.createWebhook(username, avatarFile, channelID)) {
                     WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
