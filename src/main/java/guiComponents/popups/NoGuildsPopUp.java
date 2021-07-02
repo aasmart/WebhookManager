@@ -71,7 +71,7 @@ public class NoGuildsPopUp extends JFrameEssentials {
         // Add action listener for refreshing on click
         changeToken.addActionListener(action -> {
             this.dispose();
-            new TokenPopUp("Change Token");
+            new TokenPopUp("Change Token", NoGuildsPopUp.class);
         });
 
         // Create GBC for formatting and add the text to the explanation panel

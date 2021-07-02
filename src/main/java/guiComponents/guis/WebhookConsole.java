@@ -185,7 +185,7 @@ public class WebhookConsole extends JFrameEssentials {
         // Add the username text field to a JScrollPane
         JScrollPane textScroller = new JScrollPane(usernameBox);
         textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
-        textScroller.setBackground(GRAY);
+        textScroller.setBackground(LIGHTER_MID_GRAY);
         textScroller.setBorder(BorderFactory.createEmptyBorder());
 
         // Add the text scroller to the main JPanel
@@ -228,6 +228,7 @@ public class WebhookConsole extends JFrameEssentials {
         JScrollPane textScroller = new JScrollPane(avatarURL);
         textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
         textScroller.setBorder(BorderFactory.createEmptyBorder());
+        textScroller.setBackground(LIGHTER_MID_GRAY);
 
         // Add text scroller to the main JPanel
         mainField.add(textScroller);
@@ -271,6 +272,7 @@ public class WebhookConsole extends JFrameEssentials {
         JScrollPane messageScroller = new JScrollPane(messageBox);
         messageScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
         messageScroller.setBorder(BorderFactory.createEmptyBorder());
+        messageScroller.setBackground(LIGHTER_MID_GRAY);
 
         // Create panel for the message field
         JPanel messagePanel = new JPanel();

@@ -42,6 +42,8 @@ public class MainConsole extends JFrameEssentials {
      * The basic constructor for building the Main Console
      */
     public MainConsole() {
+        WebhookGUI.GUI.MAIN_CONSOLE = this;
+
         // Setup basic console
         setTitle("Webhook Viewer");
         setResizable(true);
@@ -82,7 +84,7 @@ public class MainConsole extends JFrameEssentials {
         // GBC for center formatting
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = .6;
+        gbc.weightx = .4;
         gbc.weighty = 1;
 
         // Add webhook list
@@ -93,7 +95,7 @@ public class MainConsole extends JFrameEssentials {
         }
 
         // Add settings panel
-        gbc.weightx = .4;
+        gbc.weightx = .6;
         JPanel settingPanel = new JPanel();
         SettingsConsole.buildSettingsConsole(settingPanel);
         centerPanel.add(settingPanel, gbc);
@@ -121,7 +123,7 @@ public class MainConsole extends JFrameEssentials {
 
         // GBC for formatting
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.weightx = .6;
+        gbc.weightx = .4;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(20, 0, 0, 0);
@@ -135,7 +137,7 @@ public class MainConsole extends JFrameEssentials {
         upper.add(upperText, gbc);
 
         // Add Settings title
-        gbc.weightx = .4;
+        gbc.weightx = .6;
         gbc.insets = new Insets(20, 0, 0, 0);
         upper.add(SettingsConsole.frameTitle(), gbc);
 
@@ -180,25 +182,8 @@ public class MainConsole extends JFrameEssentials {
             listScroll.setPreferredSize(new Dimension(0, 0)); // Don't ask... just don't
 
             // Update Scrollbar styles
-            JScrollBar horizontalBar = listScroll.getHorizontalScrollBar();
-            horizontalBar.setUI(new BasicScrollBarUI() {
-                @Override
-                protected void configureScrollBarColors() {
-                    this.thumbColor = BLURPLE;
-                    this.trackColor = DARK_GRAY;
-                    this.thumbDarkShadowColor = DARK_GRAY;
-                }
-            });
-
-            JScrollBar verticalBar = listScroll.getVerticalScrollBar();
-            verticalBar.setUI(new BasicScrollBarUI() {
-                @Override
-                protected void configureScrollBarColors() {
-                    this.thumbColor = BLURPLE;
-                    this.trackColor = DARK_GRAY;
-                    this.thumbDarkShadowColor = DARK_GRAY;
-                }
-            });
+            standardizeScrollbar(listScroll.getHorizontalScrollBar());
+            standardizeScrollbar(listScroll.getVerticalScrollBar());
 
             // Populate the panel with Webhooks
             webhookListPanels.put(guild.getIdLong(), webhookList);

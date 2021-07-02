@@ -1,12 +1,16 @@
 package guiComponents.guis;
 
 import guiComponents.JFrameEssentials;
+import guiComponents.settings.Setting;
 import org.jetbrains.annotations.NotNull;
 import other.WebhookGUI;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The "Console" for all of the {@link Setting}s
+ */
 public class SettingsConsole extends JFrameEssentials {
     /**
      * If the settings console is currently open (True if so)
@@ -81,11 +85,47 @@ public class SettingsConsole extends JFrameEssentials {
         settingsPanel.setBorder(BorderFactory.createMatteBorder(0,8,0,0, NOT_QUITE_BLACK));
         settingsPanel.setBackground(MID_GRAY);
 
+        buildSettingsPanel(settingsPanel);
+
         JScrollPane scrollPane = new JScrollPane(settingsPanel);
         scrollPane.setBorder(null);
         scrollPane.setBackground(MID_GRAY);
 
         return scrollPane;
+    }
+
+    /**
+     * Takes a list of {@link guiComponents.settings.Setting}s and adds them to a given {@link JPanel}
+     *
+     * @param settingsContainer The {@link JPanel} to add the {@link Setting} objects to
+     */
+    private static void buildSettingsPanel(JPanel settingsContainer) {
+        // Create GBC for formatting
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+
+        // Remove all components from the JPanel
+        settingsContainer.removeAll();
+
+        // Add filler JPanel
+        JPanel filler = new JPanel();
+        filler.setOpaque(false);
+        settingsContainer.add(filler, gbc);
+
+        // Update GBC constraints
+        gbc.insets = new Insets(10, 10, 0, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weighty = GridBagConstraints.RELATIVE;
+
+        // Go through the list of webhooks and add them to the JPanel
+        if (WebhookGUI.settings.size() != 0) {
+            for (int i = WebhookGUI.settings.size() - 1; i >= 0; i--) {
+                JPanel webhookPanel = WebhookGUI.settings.get(i).getSettingsPanel();
+                settingsContainer.add(webhookPanel, gbc, 0);
+            }
+        }
     }
 
     /**
@@ -95,15 +135,16 @@ public class SettingsConsole extends JFrameEssentials {
         if(settingsPanel != null && isActive) {
             settingsPanel.setVisible(false);
             settingsTitle.setVisible(false);
-            WebhookGUI.GUI.MAIN_CONSOLE.revalidate();
-            WebhookGUI.GUI.MAIN_CONSOLE.repaint();
+
             isActive = false;
         } else if(settingsPanel != null) {
             settingsPanel.setVisible(true);
             settingsTitle.setVisible(true);
-            WebhookGUI.GUI.MAIN_CONSOLE.revalidate();
-            WebhookGUI.GUI.MAIN_CONSOLE.repaint();
+
             isActive = true;
         }
+
+        WebhookGUI.GUI.MAIN_CONSOLE.revalidate();
+        WebhookGUI.GUI.MAIN_CONSOLE.repaint();
     }
 }

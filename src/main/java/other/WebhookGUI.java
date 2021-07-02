@@ -4,12 +4,15 @@ import events.LeaveGuild;
 import events.Startup;
 import guiComponents.guis.MainConsole;
 import guiComponents.popups.TokenPopUp;
+import guiComponents.settings.ManagerSettings;
+import guiComponents.settings.Setting;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 
 import javax.security.auth.login.LoginException;
 import java.io.*;
+import java.util.List;
 
 /**
  * The main class for the Webhook Manager, housing the bot and the {@link MainConsole}
@@ -29,6 +32,11 @@ public class WebhookGUI {
      * The main WebhookGUI object
      */
     public static WebhookGUI GUI = new WebhookGUI();
+
+    /**
+     * A list containing all the {@link Setting}s for the Webhook Manager. Created by {@link ManagerSettings}
+     */
+    public static List<Setting> settings;
 
     /**
      * The constructor for setting up the WebhookGUI
