@@ -8,6 +8,9 @@ import other.WebhookGUI;
 public class JoinGuild extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
+        if(WebhookGUI.GUI.MAIN_CONSOLE == null)
+            return;
+
         WebhookGUI.GUI.MAIN_CONSOLE.webhookListPanels.keySet().forEach(WebhookGUI.GUI.MAIN_CONSOLE::populateList);
     }
 }
