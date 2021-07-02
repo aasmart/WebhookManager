@@ -323,10 +323,10 @@ public class Webhook extends JFrameEssentials {
 
         // Add action listener for deleting the webhook on click
         deleteButton.addActionListener(event ->
-            WebhookGUI.GUI.BOT.retrieveWebhookById(id).queue(webhook -> {
-                webhook.delete().queue();
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
-            })
+            WebhookGUI.GUI.BOT.retrieveWebhookById(id).queue(webhook ->
+                webhook.delete().queue(success ->
+                    WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex())))
+            )
         );
 
         // Create GBC for formatting
