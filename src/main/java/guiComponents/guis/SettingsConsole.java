@@ -115,7 +115,7 @@ public class SettingsConsole extends JFrameEssentials {
         settingsContainer.add(filler, gbc);
 
         // Update GBC constraints
-        gbc.insets = new Insets(10, 10, 0, 10);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = GridBagConstraints.RELATIVE;
 
