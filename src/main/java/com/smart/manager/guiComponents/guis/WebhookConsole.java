@@ -4,6 +4,8 @@ import com.smart.manager.Webhook;
 import com.smart.manager.guiComponents.JFrameEssentials;
 import com.smart.manager.guiComponents.LimitDocumentFilter;
 import com.smart.manager.guiComponents.RoundedBorder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
 import com.smart.manager.DiscordAPI;
 import com.smart.manager.WebhookGUI;
@@ -11,6 +13,9 @@ import com.smart.manager.WebhookGUI;
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * The console for managing {@link Webhook}s
@@ -25,6 +30,8 @@ public class WebhookConsole extends JFrameEssentials {
      * The {@link JTextField} for housing the {@link Webhook}'s avatar URL
      */
     private JTextField avatarURL;
+
+    private JComboBox<String> channelIDField;
 
     /**
      * The ID of the {@link Webhook} the user is currently managing
@@ -55,7 +62,10 @@ public class WebhookConsole extends JFrameEssentials {
 
         // Add important components
         add(frameTitle(), BorderLayout.NORTH);
-        add(userInputPanel(), BorderLayout.CENTER);
+        JPanel userInputPanel = userInputPanel();
+        if(userInputPanel == null)
+            return;
+        add(userInputPanel, BorderLayout.CENTER);
 
         // Create padding
         add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
@@ -103,7 +113,6 @@ public class WebhookConsole extends JFrameEssentials {
      *
      * @return A {@link JPanel}
      */
-    @NotNull
     private JPanel userInputPanel() {
         // Create the main JPanel and formatting
         JPanel panel = new JPanel();
@@ -119,7 +128,7 @@ public class WebhookConsole extends JFrameEssentials {
         GridBagConstraints gbcSub = new GridBagConstraints();
         gbcSub.gridx = 0;
         gbcSub.gridy = 0;
-        gbcSub.weightx = .75;
+        gbcSub.weightx = .4;
         gbcSub.weighty = 1;
         gbcSub.fill = GridBagConstraints.BOTH;
         gbcSub.insets = new Insets(40, 40, 40, 20);
@@ -129,9 +138,17 @@ public class WebhookConsole extends JFrameEssentials {
 
         // Update constraints and add the avatar field to the top sub JPanel
         gbcSub.gridx = 1;
-        gbcSub.weightx = .25;
-        gbcSub.insets = new Insets(40, 20, 40, 40);
+        gbcSub.weightx = .3;
+        gbcSub.insets = new Insets(40, 0, 40, 20);
         subPanelTop.add(avatarURLField(), gbcSub);
+
+        // Update constraints and add the channel ID field to the top sub JPanel
+        gbcSub.gridx = 2;
+        gbcSub.insets = new Insets(40, 0, 40, 40);
+        JPanel channelField = channelIDField();
+        if(channelField == null)
+            return null;
+        subPanelTop.add(channelField , gbcSub);
 
         // Create new GBC for the top sub panel
         GridBagConstraints gbc = new GridBagConstraints();
@@ -171,6 +188,7 @@ public class WebhookConsole extends JFrameEssentials {
         label.setFont(new Font("Calibri",Font.BOLD,36));
         label.setForeground(WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setPreferredSize(new Dimension(0, 50));
         field.add(label);
         field.add(Box.createRigidArea(new Dimension(0,5)));
 
@@ -188,6 +206,7 @@ public class WebhookConsole extends JFrameEssentials {
         textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
         textScroller.setBackground(LIGHTER_MID_GRAY);
         textScroller.setBorder(BorderFactory.createEmptyBorder());
+        textScroller.setPreferredSize(new Dimension(0,35));
 
         // Add the text scroller to the main JPanel
         field.add(textScroller);
@@ -213,6 +232,7 @@ public class WebhookConsole extends JFrameEssentials {
         label.setFont(new Font("Calibri",Font.BOLD,36));
         label.setForeground(WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setPreferredSize(new Dimension(0, 50));
         mainField.add(label);
         mainField.add(Box.createRigidArea(new Dimension(0,5)));
 
@@ -230,11 +250,76 @@ public class WebhookConsole extends JFrameEssentials {
         textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
         textScroller.setBorder(BorderFactory.createEmptyBorder());
         textScroller.setBackground(LIGHTER_MID_GRAY);
+        textScroller.setPreferredSize(new Dimension(0,35));
 
         // Add text scroller to the main JPanel
         mainField.add(textScroller);
 
         return mainField;
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private JPanel channelIDField() {
+        // Create main JPanel
+        JPanel field = new JPanel();
+        field.setOpaque(false);
+        field.setLayout(new BoxLayout(field, BoxLayout.PAGE_AXIS));
+
+        // Create JLabel for the tile, and formatting
+        JLabel label = new JLabel("Channel");
+        label.setFont(new Font("Calibri",Font.BOLD,36));
+        label.setForeground(WHITE);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setPreferredSize(new Dimension(0, 50));
+        field.add(label);
+        field.add(Box.createRigidArea(new Dimension(0,5)));
+
+        // Fetch the list of channels in the server
+        try {
+            net.dv8tion.jda.api.entities.Webhook webhook = WebhookGUI.GUI.BOT.retrieveWebhookById(id).complete();
+
+            long guildID = webhook.getGuild().getIdLong();
+            Guild g = WebhookGUI.GUI.BOT.getGuildById(guildID);
+
+            if (g == null)
+                throw new NullPointerException("Guild with ID " + guildID + " is null!");
+            List<String> tempList = g.getTextChannels().stream().map(channel -> channel.getName() + ":" + channel.getId()).collect(Collectors.toList());
+            String[] channels = new String[tempList.size()];
+
+            // Create the JComboBox for the channels, and formatting
+            channelIDField = new JComboBox<>(tempList.toArray(channels));
+            channelIDField.setBackground(LIGHTER_MID_GRAY);
+            channelIDField.setForeground(WHITE);
+            channelIDField.setBorder(null);
+            channelIDField.setFont(new Font("Calibri", Font.PLAIN, 20));
+            channelIDField.setAlignmentX(JComboBox.CENTER_ALIGNMENT);
+            channelIDField.setSelectedItem(IntStream.range(0, channels.length)
+                    .filter(i -> channels[i].contains(webhook.getChannel().getId()))
+                    .mapToObj(i -> channels[i])
+                    .collect(Collectors.toList())
+                    .get(0));
+            JLabel comboLabel = ((JLabel) channelIDField.getRenderer());
+            comboLabel.setHorizontalAlignment(JLabel.CENTER);
+
+            // TODO Fix scroll wheel setting its size based on options currently not selected
+            // Create the JScrollPane for the combo box
+            JScrollPane textScroller = new JScrollPane(channelIDField);
+            textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
+            textScroller.setBackground(LIGHTER_MID_GRAY);
+            textScroller.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
+            textScroller.setPreferredSize(new Dimension(0, 35));
+
+            standardizeScrollbar(textScroller.getVerticalScrollBar());
+            standardizeScrollbar(textScroller.getHorizontalScrollBar());
+
+            // Add text scroller to main panel
+            field.add(textScroller);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Could not retrieve the Webhook. Please try again");
+            field = null;
+        }
+
+        return field;
     }
 
     /**
@@ -291,28 +376,41 @@ public class WebhookConsole extends JFrameEssentials {
 
         // Add action listener for once the button is pressed
         sendMessage.addActionListener(event -> {
-            // Collect username and message
-            String username = usernameBox.getText().length() > 0 ? usernameBox.getText() : null;
-            String message = messageBox.getText();
-
-            // Check message length
-            if(message.length() == 0)
-                JOptionPane.showMessageDialog(this, "Message must be longer than 0 characters.");
-            else
+            try {
                 new Thread(() -> {
-                    try {
-                        // Sends message if sending the message was successful
-                        // TODO setting to disable
-                        if(DiscordAPI.sendMessage(username, avatarURL.getText().length() > 0 ? avatarURL.getText() : null, message, id, token))
-                            JOptionPane.showMessageDialog(this, "Your message was sent!");
-                        else
-                            JOptionPane.showMessageDialog(this, "Your message could not be sent! Consider checking the " +
-                                    "status of the bot and the webhook you are attempting to use.");
-
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, e.getMessage());
+                    // Update the webhooks channel
+                    Object selectedItem = channelIDField.getSelectedItem();
+                    if (selectedItem != null) {
+                        TextChannel channel = WebhookGUI.GUI.BOT.getTextChannelById(selectedItem.toString().split(":")[1]);
+                        if (channel != null)
+                            WebhookGUI.GUI.BOT.retrieveWebhookById(id)
+                                    .flatMap(webhook -> webhook.getManager().setChannel(channel)).complete();
                     }
+
+                    // Collect username and message
+                    String username = usernameBox.getText().length() > 0 ? usernameBox.getText() : null;
+                    String message = messageBox.getText();
+
+                    // Check message length
+                    if (message.length() == 0)
+                        JOptionPane.showMessageDialog(this, "Message must be longer than 0 characters.");
+                    else
+                        try {
+                            // Sends message if sending the message was successful
+                            // TODO setting to disable
+                            if (DiscordAPI.sendMessage(username, avatarURL.getText().length() > 0 ? avatarURL.getText() : null, message, id, token))
+                                JOptionPane.showMessageDialog(this, "Your message was sent!");
+                            else
+                                JOptionPane.showMessageDialog(this, "Your message could not be sent! Consider checking the " +
+                                        "status of the bot and the webhook you are attempting to use.");
+
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(this, e.getMessage());
+                        }
                 }).start();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "An error was encountered trying to send your message. Please try again: " + e.getMessage());
+            }
         });
 
         // Create GBC for formatting and adding the messageScroller

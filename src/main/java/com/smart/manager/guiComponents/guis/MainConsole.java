@@ -63,6 +63,7 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("TabbedPane.shadow", NOT_QUITE_BLACK);
         UIManager.put("TabbedPane.darkShadow", NOT_QUITE_BLACK);
         UIManager.put("TextField.caretForeground", WHITE);
+        UIManager.put("TextField.caretBackground", WHITE);
 
         // Panel for the webhook list and such
         JPanel mainConsolePanel = new JPanel(new BorderLayout());
