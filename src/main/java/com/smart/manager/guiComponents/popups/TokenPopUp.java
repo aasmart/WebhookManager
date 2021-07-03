@@ -1,9 +1,9 @@
-package guiComponents.popups;
+package com.smart.manager.guiComponents.popups;
 
-import guiComponents.JFrameEssentials;
-import guiComponents.RoundedBorder;
-import guiComponents.settings.ManagerSettings;
-import other.WebhookGUI;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.RoundedBorder;
+import com.smart.manager.guiComponents.settings.ManagerSettings;
+import com.smart.manager.WebhookGUI;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;

@@ -1,9 +1,9 @@
-package other;
+package com.smart.manager;
 
-import guiComponents.JFrameEssentials;
-import guiComponents.RoundedBorder;
-import guiComponents.guis.WebhookConsole;
-import guiComponents.guis.WebhookCreateConsole;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.RoundedBorder;
+import com.smart.manager.guiComponents.guis.WebhookConsole;
+import com.smart.manager.guiComponents.guis.WebhookCreateConsole;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.TextChannel;
 

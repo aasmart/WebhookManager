@@ -1,4 +1,4 @@
-package other;
+package com.smart.manager;
 
 import okhttp3.*;
 import org.json.JSONArray;

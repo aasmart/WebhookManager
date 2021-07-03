@@ -1,8 +1,8 @@
-package guiComponents.popups;
+package com.smart.manager.guiComponents.popups;
 
-import events.Startup;
-import guiComponents.JFrameEssentials;
-import guiComponents.RoundedBorder;
+import com.smart.manager.events.Startup;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.RoundedBorder;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;

@@ -1,12 +1,12 @@
-package other;
+package com.smart.manager;
 
-import events.JoinGuild;
-import events.LeaveGuild;
-import events.Startup;
-import guiComponents.guis.MainConsole;
-import guiComponents.popups.TokenPopUp;
-import guiComponents.settings.ManagerSettings;
-import guiComponents.settings.Setting;
+import com.smart.manager.events.JoinGuild;
+import com.smart.manager.events.LeaveGuild;
+import com.smart.manager.events.Startup;
+import com.smart.manager.guiComponents.guis.MainConsole;
+import com.smart.manager.guiComponents.popups.TokenPopUp;
+import com.smart.manager.guiComponents.settings.ManagerSettings;
+import com.smart.manager.guiComponents.settings.Setting;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;

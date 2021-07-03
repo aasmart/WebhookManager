@@ -1,17 +1,16 @@
-package guiComponents.guis;
+package com.smart.manager.guiComponents.guis;
 
-import guiComponents.JFrameEssentials;
-import guiComponents.RoundedBorder;
-import guiComponents.popups.InvalidPermsPopUp;
-import guiComponents.popups.NoGuildsPopUp;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.RoundedBorder;
+import com.smart.manager.guiComponents.popups.InvalidPermsPopUp;
+import com.smart.manager.guiComponents.popups.NoGuildsPopUp;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
-import other.Webhook;
-import other.WebhookGUI;
+import com.smart.manager.Webhook;
+import com.smart.manager.WebhookGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.net.URL;
 import java.util.LinkedHashMap;

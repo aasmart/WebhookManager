@@ -1,9 +1,9 @@
-package guiComponents.guis;
+package com.smart.manager.guiComponents.guis;
 
-import guiComponents.JFrameEssentials;
-import guiComponents.settings.Setting;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.settings.Setting;
 import org.jetbrains.annotations.NotNull;
-import other.WebhookGUI;
+import com.smart.manager.WebhookGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,7 +95,7 @@ public class SettingsConsole extends JFrameEssentials {
     }
 
     /**
-     * Takes a list of {@link guiComponents.settings.Setting}s and adds them to a given {@link JPanel}
+     * Takes a list of {@link com.smart.manager.guiComponents.settings.Setting}s and adds them to a given {@link JPanel}
      *
      * @param settingsContainer The {@link JPanel} to add the {@link Setting} objects to
      */

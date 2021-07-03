@@ -1,11 +1,11 @@
-package guiComponents.settings;
+package com.smart.manager.guiComponents.settings;
 
-import guiComponents.JFrameEssentials;
-import guiComponents.LimitDocumentFilter;
-import guiComponents.RoundedBorder;
-import guiComponents.guis.MainConsole;
-import guiComponents.popups.TokenPopUp;
-import other.WebhookGUI;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.LimitDocumentFilter;
+import com.smart.manager.guiComponents.RoundedBorder;
+import com.smart.manager.guiComponents.guis.MainConsole;
+import com.smart.manager.guiComponents.popups.TokenPopUp;
+import com.smart.manager.WebhookGUI;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;

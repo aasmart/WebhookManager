@@ -1,45 +1,46 @@
-package guiComponents.guis;
+package com.smart.manager.guiComponents.guis;
 
-import guiComponents.JFrameEssentials;
-import guiComponents.LimitDocumentFilter;
-import guiComponents.RoundedBorder;
+import com.smart.manager.Webhook;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.LimitDocumentFilter;
+import com.smart.manager.guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
-import other.DiscordAPI;
-import other.WebhookGUI;
+import com.smart.manager.DiscordAPI;
+import com.smart.manager.WebhookGUI;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
 
 /**
- * The console for managing {@link other.Webhook}s
+ * The console for managing {@link Webhook}s
  */
 public class WebhookConsole extends JFrameEssentials {
     /**
-     * The {@link JTextField} for housing the {@link other.Webhook}'s username
+     * The {@link JTextField} for housing the {@link Webhook}'s username
      */
     private JTextField usernameBox;
 
     /**
-     * The {@link JTextField} for housing the {@link other.Webhook}'s avatar URL
+     * The {@link JTextField} for housing the {@link Webhook}'s avatar URL
      */
     private JTextField avatarURL;
 
     /**
-     * The ID of the {@link other.Webhook} the user is currently managing
+     * The ID of the {@link Webhook} the user is currently managing
      */
     private final String id;
 
     /**
-     * The token of the {@link other.Webhook} the user is currently managing
+     * The token of the {@link Webhook} the user is currently managing
      */
     private final String token;
 
     /**
      * The basic constructor for the {@link WebhookConsole} {@link JFrame}.
      *
-     * @param id The ID of the {@link other.Webhook} the user is managing
-     * @param token The token of the {@link other.Webhook} the user is managing
+     * @param id The ID of the {@link Webhook} the user is managing
+     * @param token The token of the {@link Webhook} the user is managing
      */
     public WebhookConsole(String id, String token) {
         this.id = id;
@@ -153,7 +154,7 @@ public class WebhookConsole extends JFrameEssentials {
     }
 
     /**
-     * Creates the field for entering the {@link other.Webhook}'s username when sending a message
+     * Creates the field for entering the {@link Webhook}'s username when sending a message
      *
      * @return A {@link JPanel}
      */
@@ -195,7 +196,7 @@ public class WebhookConsole extends JFrameEssentials {
     }
 
     /**
-     * Creates the field for entering the {@link other.Webhook}'s avatar for when sending a message
+     * Creates the field for entering the {@link Webhook}'s avatar for when sending a message
      *
      * @return A {@link JPanel}
      */

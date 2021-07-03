@@ -1,12 +1,12 @@
-package guiComponents.guis;
+package com.smart.manager.guiComponents.guis;
 
-import guiComponents.JFrameEssentials;
-import guiComponents.LimitDocumentFilter;
-import guiComponents.RoundedBorder;
+import com.smart.manager.guiComponents.JFrameEssentials;
+import com.smart.manager.guiComponents.LimitDocumentFilter;
+import com.smart.manager.guiComponents.RoundedBorder;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
-import other.Webhook;
-import other.WebhookGUI;
+import com.smart.manager.Webhook;
+import com.smart.manager.WebhookGUI;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;

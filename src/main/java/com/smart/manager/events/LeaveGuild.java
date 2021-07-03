@@ -1,13 +1,14 @@
-package events;
+package com.smart.manager.events;
 
-import guiComponents.popups.NoGuildsPopUp;
+import com.smart.manager.Webhook;
+import com.smart.manager.guiComponents.popups.NoGuildsPopUp;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import other.WebhookGUI;
+import com.smart.manager.WebhookGUI;
 
 /**
- * Called when the bot leaves a {@link net.dv8tion.jda.api.entities.Guild}. This is for refreshing the list of active {@link other.Webhook}s
+ * Called when the bot leaves a {@link net.dv8tion.jda.api.entities.Guild}. This is for refreshing the list of active {@link Webhook}s
  */
 public class LeaveGuild extends ListenerAdapter {
     @Override

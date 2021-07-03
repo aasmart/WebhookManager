@@ -1,7 +1,6 @@
-package guiComponents.settings;
+package com.smart.manager.guiComponents.settings;
 
 import javax.swing.*;
-import java.util.List;
 import java.util.function.Supplier;
 
 /**

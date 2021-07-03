@@ -1,7 +1,7 @@
-package guiComponents;
+package com.smart.manager.guiComponents;
 
-import guiComponents.guis.WebhookCreateConsole;
-import other.WebhookGUI;
+import com.smart.manager.guiComponents.guis.WebhookCreateConsole;
+import com.smart.manager.WebhookGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -100,7 +100,7 @@ public class JFrameEssentials extends JFrame {
     }
 
     /**
-     * Creates a {@link JPanel} housing a "Cancel Button" that will close the current {@link JFrame} and return the current GUI to {@link guiComponents.guis.MainConsole}
+     * Creates a {@link JPanel} housing a "Cancel Button" that will close the current {@link JFrame} and return the current GUI to {@link com.smart.manager.guiComponents.guis.MainConsole}
      *
      * @param frame The {@link JFrame} the button is assigned to
      * @return A {@link JPanel} housing the button

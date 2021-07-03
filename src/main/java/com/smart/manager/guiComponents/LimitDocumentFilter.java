@@ -1,4 +1,4 @@
-package guiComponents;
+package com.smart.manager.guiComponents;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

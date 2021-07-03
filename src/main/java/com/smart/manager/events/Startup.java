@@ -1,12 +1,12 @@
-package events;
+package com.smart.manager.events;
 
-import guiComponents.guis.MainConsole;
-import guiComponents.popups.NoGuildsPopUp;
-import guiComponents.settings.ManagerSettings;
+import com.smart.manager.guiComponents.guis.MainConsole;
+import com.smart.manager.guiComponents.popups.NoGuildsPopUp;
+import com.smart.manager.guiComponents.settings.ManagerSettings;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import other.WebhookGUI;
+import com.smart.manager.WebhookGUI;
 
 /**
  * Called once the {@link WebhookGUI#BOT} is ready

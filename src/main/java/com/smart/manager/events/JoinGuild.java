@@ -1,9 +1,9 @@
-package events;
+package com.smart.manager.events;
 
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import other.WebhookGUI;
+import com.smart.manager.WebhookGUI;
 
 public class JoinGuild extends ListenerAdapter {
     @Override
