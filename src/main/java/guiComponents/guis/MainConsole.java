@@ -42,14 +42,14 @@ public class MainConsole extends JFrameEssentials {
      * The basic constructor for building the Main Console
      */
     public MainConsole() {
+        WebhookGUI.GUI.MAIN_CONSOLE = this;
+
         // Setup basic console
         setTitle("Webhook Viewer");
-        setSize(600, 700);
+        setResizable(true);
         setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(NOT_QUITE_BLACK);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        getContentPane().setBackground(NOT_QUITE_BLACK);
 
         // Update UI
         UIManager.put("OptionPane.background", NOT_QUITE_BLACK);
@@ -63,21 +63,52 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("TabbedPane.highlight", NOT_QUITE_BLACK);
         UIManager.put("TabbedPane.shadow", NOT_QUITE_BLACK);
         UIManager.put("TabbedPane.darkShadow", NOT_QUITE_BLACK);
+        UIManager.put("TextField.caretForeground", WHITE);
+
+        // Panel for the webhook list and such
+        JPanel mainConsolePanel = new JPanel(new BorderLayout());
+        mainConsolePanel.setOpaque(false);
 
         // Padding
-        add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
-        add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        mainConsolePanel.add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
+        mainConsolePanel.add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
 
         // Add various panels
-        add(frameTitle(), BorderLayout.NORTH);
-        add(createButtonsPanel(), BorderLayout.SOUTH);
-        add(createGuildPanel(), BorderLayout.CENTER);
+        mainConsolePanel.add(frameTitle(), BorderLayout.NORTH);
+        mainConsolePanel.add(createButtonsPanel(), BorderLayout.SOUTH);
+
+        // Create JPanel for the center
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setBackground(null);
+
+        // GBC for center formatting
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = .4;
+        gbc.weighty = 1;
+
+        // Add webhook list
+        centerPanel.add(createGuildPanel(), gbc);
         if(!webhookList()) {
             WebhookGUI.GUI.MAIN_CONSOLE = null;
             return;
         }
 
+        // Add settings panel
+        gbc.weightx = .6;
+        JPanel settingPanel = new JPanel();
+        SettingsConsole.buildSettingsConsole(settingPanel);
+        centerPanel.add(settingPanel, gbc);
+
+        // Add various panels
+        mainConsolePanel.add(centerPanel, BorderLayout.CENTER);
+        getContentPane().add(mainConsolePanel);
+
+        setSize(700, 700);
+        setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
+        getContentPane().repaint();
     }
 
     /**
@@ -87,9 +118,15 @@ public class MainConsole extends JFrameEssentials {
     @NotNull
     private JPanel frameTitle() {
         // Create the JPanel for housing the JLabel
-        JPanel upper = new JPanel();
-        upper.setLayout(new BorderLayout());
+        JPanel upper = new JPanel(new GridBagLayout());
         upper.setBackground(NOT_QUITE_BLACK);
+
+        // GBC for formatting
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = .4;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(20, 0, 0, 0);
 
         // Create the title JLabel
         JLabel upperText = new JLabel("Webhook Viewer",SwingConstants.CENTER);
@@ -97,10 +134,19 @@ public class MainConsole extends JFrameEssentials {
         upperText.setForeground(WHITE);
 
         // Add upperText to upper with formatting
-        upper.add(padding(NOT_QUITE_BLACK), BorderLayout.NORTH);
-        upper.add(upperText, BorderLayout.CENTER);
+        upper.add(upperText, gbc);
 
-        return upper;
+        // Add Settings title
+        gbc.weightx = .6;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        upper.add(SettingsConsole.frameTitle(), gbc);
+
+        // Add padding so the components are centered properly
+        JPanel paddingPanel = new JPanel(new BorderLayout());
+        paddingPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
+        paddingPanel.add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        paddingPanel.add(upper, BorderLayout.CENTER);
+        return paddingPanel;
     }
 
     private JTabbedPane createGuildPanel() {
@@ -131,29 +177,13 @@ public class MainConsole extends JFrameEssentials {
 
             // House the list panel inside a JScrollPane
             JScrollPane listScroll = new JScrollPane(webhookList);
-            listScroll.setBorder(BorderFactory.createEmptyBorder());
+            listScroll.setBorder(null);
             listScroll.setBackground(NOT_QUITE_BLACK);
+            listScroll.setPreferredSize(new Dimension(0, 0)); // Don't ask... just don't
 
             // Update Scrollbar styles
-            JScrollBar horizontalBar = listScroll.getHorizontalScrollBar();
-            horizontalBar.setUI(new BasicScrollBarUI() {
-                @Override
-                protected void configureScrollBarColors() {
-                    this.thumbColor = BLURPLE;
-                    this.trackColor = DARK_GRAY;
-                    this.thumbDarkShadowColor = DARK_GRAY;
-                }
-            });
-
-            JScrollBar verticalBar = listScroll.getVerticalScrollBar();
-            verticalBar.setUI(new BasicScrollBarUI() {
-                @Override
-                protected void configureScrollBarColors() {
-                    this.thumbColor = BLURPLE;
-                    this.trackColor = DARK_GRAY;
-                    this.thumbDarkShadowColor = DARK_GRAY;
-                }
-            });
+            standardizeScrollbar(listScroll.getHorizontalScrollBar());
+            standardizeScrollbar(listScroll.getVerticalScrollBar());
 
             // Populate the panel with Webhooks
             webhookListPanels.put(guild.getIdLong(), webhookList);
@@ -180,7 +210,7 @@ public class MainConsole extends JFrameEssentials {
         JPanel addButtonPanel = new JPanel();
         addButtonPanel.setLayout(new GridBagLayout());
         addButtonPanel.setBackground(NOT_QUITE_BLACK);
-        addButtonPanel.setBorder(BorderFactory.createEmptyBorder());
+        addButtonPanel.setBorder(BorderFactory.createLineBorder(NOT_QUITE_BLACK, 1));
 
         // Get the "Add Button"
         JButton addButton = createButton();
@@ -294,9 +324,9 @@ public class MainConsole extends JFrameEssentials {
         }
 
         // Add action listener for loading the settings panel
-        settings.addActionListener(action -> {
-
-        });
+        settings.addActionListener(action ->
+            SettingsConsole.toggleSettings()
+        );
 
         return settings;
     }
@@ -352,9 +382,8 @@ public class MainConsole extends JFrameEssentials {
                     }
                 }
 
-                // Refresh the console to display update webhook list
-                validate();
-                repaint();
+              getContentPane().validate();
+              getContentPane().repaint();
             }, fail ->
                 System.out.println(fail.getMessage())
             );

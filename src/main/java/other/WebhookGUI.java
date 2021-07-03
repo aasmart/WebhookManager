@@ -5,12 +5,16 @@ import events.LeaveGuild;
 import events.Startup;
 import guiComponents.guis.MainConsole;
 import guiComponents.popups.TokenPopUp;
+import guiComponents.settings.ManagerSettings;
+import guiComponents.settings.Setting;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 
 import javax.security.auth.login.LoginException;
 import java.io.*;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * The main class for the Webhook Manager, housing the bot and the {@link MainConsole}
@@ -32,6 +36,16 @@ public class WebhookGUI {
     public static WebhookGUI GUI = new WebhookGUI();
 
     /**
+     * A list containing all the {@link Setting}s for the Webhook Manager. Created by {@link ManagerSettings}
+     */
+    public static List<Setting> settings;
+
+    /**
+     * The manager's associated {@link Properties} file
+     */
+    public static Properties managerProperties;
+
+    /**
      * The constructor for setting up the WebhookGUI
      */
     public WebhookGUI() {
@@ -39,6 +53,8 @@ public class WebhookGUI {
         String token = readToken();
         if(token == null || token.length() == 0)
             return;
+
+        managerProperties = readProperties();
 
         try {
             JDABuilder builder = JDABuilder.createDefault(token)
@@ -48,7 +64,7 @@ public class WebhookGUI {
                             new LeaveGuild()
                     )
                     .setRawEventsEnabled(true)
-                    .setActivity(Activity.playing("with webhooks"));
+                    .setActivity(makeActivity(managerProperties.getProperty("activity-type"), managerProperties.getProperty("activity-desc")));
 
             BOT = builder.build();
         } catch (LoginException e) {
@@ -125,6 +141,114 @@ public class WebhookGUI {
             }
         }
         return true;
+    }
+
+    /**
+     * Reads the {@link Properties} file associated with the manager
+     * @return A {@link Properties} file
+     */
+    @SuppressWarnings("unused")
+    public static Properties readProperties() {
+        // Retrieve the file location
+        String propertiesLocation = System.getProperty("user.home") + "\\WebhookManager\\manager_props.properties";
+        File f = new File(propertiesLocation);
+
+        // Create Properties File object
+        Properties p = new Properties();
+
+        // Setup a FileInputStream
+        FileInputStream inputStream = null;
+        try {
+            // Create the properties file if it doesn't exist
+            if(!f.isFile()) {
+                final boolean mkdir = f.getParentFile().mkdir();
+                final boolean created = f.createNewFile();
+                return getDefaultProperties();
+            } else {
+                // Read properties
+                inputStream = new FileInputStream(f);
+                p.load(inputStream);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("closed");
+            // Attempt to close the input stream
+            try {
+                if(inputStream != null)
+                    inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return p;
+    }
+
+    /**
+     * Writes a {@link Properties} file to its set file location
+     * @param properties The {@link Properties} file to write
+     */
+    @SuppressWarnings("unused")
+    public static void writeProperties(Properties properties) {
+        // Retrieve the file location
+        String tokenLocation = System.getProperty("user.home") + "\\WebhookManager\\manager_props.properties";
+        File f = new File(tokenLocation);
+
+        // Setup a FileWriter
+        FileWriter fileWriter = null;
+        try {
+            // Create the properties file if it doesn't exist
+            if(!f.isFile()) {
+                final boolean mkdir = f.getParentFile().mkdir();
+                final boolean created = f.createNewFile();
+            }
+
+            // Write properties
+            fileWriter = new FileWriter(f);
+            properties.store(fileWriter, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Attempt to close the FileWriter
+            try {
+                if(fileWriter != null)
+                    fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Returns the default {@link Properties} for the manager
+     * @return A {@link Properties} file with the default properties
+     */
+    public static Properties getDefaultProperties() {
+        Properties p = new Properties();
+        p.put("activity-type", "Playing");
+        p.put("activity-desc", "with Webhooks");
+
+        return p;
+    }
+
+    /**
+     * Converts text into an {@link Activity}
+     *
+     * @param type The type of activity (Playing, Listening, Watching, Competing)
+     * @param description The description of the activity (ex. Youtube)
+     * @return The created {@link Activity}
+     */
+    public static Activity makeActivity(String type, String description) {
+        if(description == null || description.length() == 0)
+            return Activity.playing("with Webhooks");
+        return switch (type.toLowerCase()) {
+            case "playing" -> Activity.playing(description);
+            case "listening" -> Activity.listening(description);
+            case "watching" -> Activity.watching(description);
+            case "competing" -> Activity.competing(description);
+            default -> Activity.playing("with Webhooks");
+        };
     }
 
 }

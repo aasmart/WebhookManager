@@ -2,31 +2,62 @@ package guiComponents.popups;
 
 import guiComponents.JFrameEssentials;
 import guiComponents.RoundedBorder;
+import guiComponents.settings.ManagerSettings;
 import other.WebhookGUI;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * A popup for telling the user that the application is missing a (valid) bot token
  */
 public class TokenPopUp extends JFrameEssentials {
     /**
+     * Creates a TokenPopUp with a cancel {@link JButton}
+     * @param titleText The text to set the title of the popup to
+     * @param returnTo The JFrame to return to when the window is closed
+     */
+    public <G extends JFrameEssentials> TokenPopUp(String titleText, Class<G> returnTo) {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                try {
+                    returnTo.getDeclaredConstructor().newInstance();
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        createPopUp(titleText, true);
+    }
+
+    /**
      * Creates the token pop up
      *
      * @param titleText The text to set the title of the popup to
      */
     public TokenPopUp(String titleText) {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        createPopUp(titleText, false);
+    }
+
+    /**
+     * Creates the popup
+     * @param titleText The text to set the title of the popup to
+     * @param hasCancelButton If the popup has the cancel button
+     */
+    private void createPopUp(String titleText, boolean hasCancelButton) {
         // Basic JFrame formatting
         setTitle(titleText);
         setSize(600, 350);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create explanation JPanel
         JPanel explanation = new JPanel();
@@ -75,25 +106,8 @@ public class TokenPopUp extends JFrameEssentials {
         tokenScroll.setBorder(BorderFactory.createLineBorder(MID_GRAY, 5));
 
         // Set scroll bar formatting
-        JScrollBar horizontalBar = tokenScroll.getHorizontalScrollBar();
-        horizontalBar.setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = BLURPLE;
-                this.trackColor = DARK_GRAY;
-                this.thumbDarkShadowColor = NOT_QUITE_BLACK;
-            }
-        });
-
-        JScrollBar verticalBar = tokenScroll.getVerticalScrollBar();
-        verticalBar.setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = BLURPLE;
-                this.trackColor = DARK_GRAY;
-                this.thumbDarkShadowColor = NOT_QUITE_BLACK;
-            }
-        });
+        standardizeScrollbar(tokenScroll.getHorizontalScrollBar());
+        standardizeScrollbar(tokenScroll.getVerticalScrollBar());
 
         // Create the JButton for submitting the token
         JButton submit = new JButton("Submit Token");
@@ -107,12 +121,32 @@ public class TokenPopUp extends JFrameEssentials {
         submit.addActionListener(action -> {
             String token = tokenField.getText();
             if(token.length() > 0) {
+                // Remove the active window listener because it calls on close and that's not what I want
+                if(getWindowListeners().length > 0)
+                    this.removeWindowListener(this.getWindowListeners()[0]);
                 this.dispose();
-                if(WebhookGUI.writeToken(tokenField.getText()))
+                if(WebhookGUI.writeToken(tokenField.getText())) {
+                    if(WebhookGUI.GUI.BOT != null)
+                        WebhookGUI.GUI.BOT.shutdownNow();
+                    WebhookGUI.settings = ManagerSettings.compileSettings();
                     WebhookGUI.GUI = new WebhookGUI();
+                }
             } else
                 JOptionPane.showMessageDialog(this, "Must have a token!");
         });
+
+        // Create "Cancel Button" if the Action Listener exists
+        JButton cancel = null;
+        if(hasCancelButton) {
+            cancel = new JButton("Cancel");
+            cancel.setBackground(RED);
+            cancel.setBorder(new RoundedBorder(Color.BLACK, 0, 16));
+            cancel.setForeground(WHITE);
+            cancel.setFont(new Font("Calibri",Font.BOLD,20));
+            setHoverBrightnessChange(cancel, .25f);
+
+            cancel.addActionListener(action -> dispose());
+        }
 
         // Create GBC for formatting and add the title text to the explanation JPanel
         GridBagConstraints gbc = new GridBagConstraints();
@@ -133,11 +167,29 @@ public class TokenPopUp extends JFrameEssentials {
         gbc.insets = new Insets(3, 20, 20, 20);
         explanation.add(tokenScroll, gbc);
 
-        // Updated constraints add add the submit JButton
+        // JPanel for the buttons
+        JPanel buttonsPanel = new JPanel(new GridBagLayout());
+        buttonsPanel.setBackground(NOT_QUITE_BLACK);
+
+        // Updated constraints add add the submit/cancel JButtons
+        gbc.weighty = 1;
+        gbc.weightx = .8;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 0, 20);
+        buttonsPanel.add(submit, gbc);
+
+        if(cancel != null) {
+            gbc.weightx = .2;
+            gbc.insets = new Insets(0, 0, 0, 0);
+            buttonsPanel.add(cancel, gbc);
+        }
+
+        // Add buttonPanel to explanation
         gbc.weighty = .1;
+        gbc.weightx = 1;
         gbc.gridy = 3;
         gbc.insets = new Insets(0, 20, 20, 20);
-        explanation.add(submit, gbc);
+        explanation.add(buttonsPanel, gbc);
 
         // Add the explanation JPanel to the JFrame
         add(explanation);

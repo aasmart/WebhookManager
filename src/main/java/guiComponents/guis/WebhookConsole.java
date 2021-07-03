@@ -5,7 +5,6 @@ import guiComponents.LimitDocumentFilter;
 import guiComponents.RoundedBorder;
 import org.jetbrains.annotations.NotNull;
 import other.DiscordAPI;
-import other.Webhook;
 import other.WebhookGUI;
 
 import javax.swing.*;
@@ -107,12 +106,12 @@ public class WebhookConsole extends JFrameEssentials {
     private JPanel userInputPanel() {
         // Create the main JPanel and formatting
         JPanel panel = new JPanel();
-        panel.setBackground(DARK_GRAY);
+        panel.setBackground(MID_GRAY);
         panel.setLayout(new GridBagLayout());
 
         // Create the JPanel that goes on the top row of the main JPanel
         JPanel subPanelTop = new JPanel();
-        subPanelTop.setBackground(DARK_GRAY);
+        subPanelTop.setOpaque(false);
         subPanelTop.setLayout(new GridBagLayout());
 
         // Create GBC for formatting
@@ -159,10 +158,11 @@ public class WebhookConsole extends JFrameEssentials {
      * @return A {@link JPanel}
      */
     @NotNull
+    @SuppressWarnings("DuplicatedCode")
     private JPanel usernameField() {
         // Create JPanel for housing the JLabel/JTextField
         JPanel field = new JPanel();
-        field.setBackground(DARK_GRAY);
+        field.setOpaque(false);
         field.setLayout(new BoxLayout(field, BoxLayout.PAGE_AXIS));
 
         // Create the JLabel (Title)
@@ -176,15 +176,16 @@ public class WebhookConsole extends JFrameEssentials {
         // Create the JTextField for entering the Webhook's nickname
         usernameBox = new JTextField();
         ((AbstractDocument)usernameBox.getDocument()).setDocumentFilter(new LimitDocumentFilter(80));
-        usernameBox.setBackground(GRAY);
-        usernameBox.setForeground(NOT_QUITE_BLACK);
+        usernameBox.setBackground(LIGHTER_MID_GRAY);
+        usernameBox.setForeground(WHITE);
+        usernameBox.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
         usernameBox.setFont(new Font("Calibri",Font.PLAIN,20));
         usernameBox.setHorizontalAlignment(JTextField.CENTER);
 
         // Add the username text field to a JScrollPane
         JScrollPane textScroller = new JScrollPane(usernameBox);
         textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
-        textScroller.setBackground(GRAY);
+        textScroller.setBackground(LIGHTER_MID_GRAY);
         textScroller.setBorder(BorderFactory.createEmptyBorder());
 
         // Add the text scroller to the main JPanel
@@ -199,10 +200,11 @@ public class WebhookConsole extends JFrameEssentials {
      * @return A {@link JPanel}
      */
     @NotNull
+    @SuppressWarnings("DuplicatedCode")
     private JPanel avatarURLField() {
         // Create main JPanel & formatting
         JPanel mainField = new JPanel();
-        mainField.setBackground(DARK_GRAY);
+        mainField.setOpaque(false);
         mainField.setLayout(new BoxLayout(mainField, BoxLayout.PAGE_AXIS));
 
         // Create JLabel for title
@@ -216,8 +218,9 @@ public class WebhookConsole extends JFrameEssentials {
         // Create the JTextField for entering the avatar URL & formatting
         avatarURL = new JTextField();
         ((AbstractDocument)avatarURL.getDocument()).setDocumentFilter(new LimitDocumentFilter(80));
-        avatarURL.setBackground(GRAY);
-        avatarURL.setForeground(NOT_QUITE_BLACK);
+        avatarURL.setBackground(LIGHTER_MID_GRAY);
+        avatarURL.setForeground(WHITE);
+        avatarURL.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
         avatarURL.setFont(new Font("Calibri",Font.PLAIN,20));
         avatarURL.setHorizontalAlignment(JTextField.CENTER);
 
@@ -225,6 +228,7 @@ public class WebhookConsole extends JFrameEssentials {
         JScrollPane textScroller = new JScrollPane(avatarURL);
         textScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
         textScroller.setBorder(BorderFactory.createEmptyBorder());
+        textScroller.setBackground(LIGHTER_MID_GRAY);
 
         // Add text scroller to the main JPanel
         mainField.add(textScroller);
@@ -242,13 +246,13 @@ public class WebhookConsole extends JFrameEssentials {
     private JPanel message() {
         // Create main JPanel & formatting
         JPanel mainMessagePanel = new JPanel();
-        mainMessagePanel.setBackground(DARK_GRAY);
+        mainMessagePanel.setOpaque(false);
         mainMessagePanel.setLayout(new BoxLayout(mainMessagePanel, BoxLayout.PAGE_AXIS));
 
         // Create the JLabel for the field's title, and formatting
         JLabel messageTitle = new JLabel("Message");
         messageTitle.setFont(new Font("Calibri",Font.BOLD,36));
-        messageTitle.setBackground(DARK_GRAY);
+        messageTitle.setOpaque(false);
         messageTitle.setForeground(WHITE);
         messageTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainMessagePanel.add(messageTitle);
@@ -256,8 +260,9 @@ public class WebhookConsole extends JFrameEssentials {
 
         // Create the JTextArea for entering the message's contents, and formatting
         JTextArea messageBox = new JTextArea();
-        messageBox.setBackground(GRAY);
-        messageBox.setForeground(NOT_QUITE_BLACK);
+        messageBox.setBackground(LIGHTER_MID_GRAY);
+        messageBox.setForeground(WHITE);
+        messageBox.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
         messageBox.setFont(new Font("Calibri",Font.PLAIN,18));
         messageBox.setLineWrap(true);
         messageBox.setWrapStyleWord(true);
@@ -267,6 +272,7 @@ public class WebhookConsole extends JFrameEssentials {
         JScrollPane messageScroller = new JScrollPane(messageBox);
         messageScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
         messageScroller.setBorder(BorderFactory.createEmptyBorder());
+        messageScroller.setBackground(LIGHTER_MID_GRAY);
 
         // Create panel for the message field
         JPanel messagePanel = new JPanel();

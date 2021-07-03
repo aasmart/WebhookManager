@@ -5,6 +5,7 @@ import other.WebhookGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,6 +23,7 @@ public class JFrameEssentials extends JFrame {
     public static final Color GREEN = new Color(0x57F287);
     public static final Color RED = new Color(0xED4245);
     public static final Color MID_GRAY = new Color(0x36393F);
+    public static final Color LIGHTER_MID_GRAY = new Color(0x40444B);
 
     /**
      * Creates a JPanel with a background color
@@ -29,7 +31,7 @@ public class JFrameEssentials extends JFrame {
      * @param color The color to set the background to
      * @return A {@link JPanel}
      */
-    public JPanel padding(Color color) {
+    public static JPanel padding(Color color) {
         JPanel padding = new JPanel();
         padding.setBackground(color);
         return padding;
@@ -78,6 +80,21 @@ public class JFrameEssentials extends JFrame {
                 hsb[2] /= (1 - percentBrightnessChange);
                 Color colorNew = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
                 component.setBackground(colorNew);
+            }
+        });
+    }
+
+    /**
+     * Set's the scrollbar to the standard look/feel
+     * @param scrollBar The {@link JScrollBar} to update
+     */
+    public static void standardizeScrollbar(JScrollBar scrollBar) {
+        scrollBar.setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = BLURPLE;
+                this.trackColor = DARK_GRAY;
+                this.thumbDarkShadowColor = DARK_GRAY;
             }
         });
     }
