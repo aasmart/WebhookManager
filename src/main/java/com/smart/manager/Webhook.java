@@ -81,9 +81,14 @@ public class Webhook extends JFrameEssentials {
                     }
 
                 WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
-            }, fail ->
-                JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, fail)
-            );
+            }, fail -> {
+                if(fail.getMessage().startsWith("30007"))
+                    JOptionPane.showMessageDialog(
+                            WebhookGUI.GUI.MAIN_CONSOLE,
+                            "You have reached the maximum amount of 10 Webhooks for the " + channel.getName() + " channel.");
+                else
+                    JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, fail.getMessage());
+            });
         } catch (Exception e) {
             JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, e.getMessage());
         }
@@ -325,10 +330,11 @@ public class Webhook extends JFrameEssentials {
         // Add action listener for deleting the webhook on click
         deleteButton.addActionListener(event ->
             WebhookGUI.GUI.BOT.retrieveWebhookById(id).queue(webhook ->
-                webhook.delete().queue(success ->
-                    WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex())))
-            )
-        );
+                webhook.delete().queue(success -> {
+                    WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
+                    JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Successfully deleted the Webhook!");
+                })
+        ));
 
         // Create GBC for formatting
         GridBagConstraints gbc = new GridBagConstraints();
