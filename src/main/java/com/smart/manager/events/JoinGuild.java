@@ -11,6 +11,6 @@ public class JoinGuild extends ListenerAdapter {
         if(WebhookGUI.GUI.MAIN_CONSOLE == null)
             return;
 
-        WebhookGUI.GUI.MAIN_CONSOLE.webhookListPanels.keySet().forEach(WebhookGUI.GUI.MAIN_CONSOLE::populateList);
+        WebhookGUI.GUI.MAIN_CONSOLE.webhookList();
     }
 }

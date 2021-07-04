@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import com.smart.manager.WebhookGUI;
 
+import java.util.stream.Collectors;
+
 /**
  * Called when the bot leaves a {@link net.dv8tion.jda.api.entities.Guild}. This is for refreshing the list of active {@link Webhook}s
  */
@@ -19,7 +21,12 @@ public class LeaveGuild extends ListenerAdapter {
         if(WebhookGUI.GUI.BOT.getGuilds().size() == 0) {
             WebhookGUI.GUI.MAIN_CONSOLE.dispose();
             new NoGuildsPopUp();
-        } else
+        } else {
+            WebhookGUI.GUI.MAIN_CONSOLE.webhookListPanels.remove(event.getGuild().getIdLong());
+            WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.remove(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.entrySet().stream()
+                    .filter(e -> e.getValue() == event.getGuild().getIdLong())
+                    .collect(Collectors.toList()).get(0).getKey());
             WebhookGUI.GUI.MAIN_CONSOLE.webhookListPanels.keySet().forEach(WebhookGUI.GUI.MAIN_CONSOLE::populateList);
+        }
     }
 }

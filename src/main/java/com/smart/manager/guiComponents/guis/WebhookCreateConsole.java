@@ -350,8 +350,10 @@ public class WebhookCreateConsole extends JFrameEssentials {
 
         // Fetch the list of channels in the server
         Guild g = WebhookGUI.GUI.BOT.getGuildById(guildID);
-        if(g == null)
+        if(g == null) {
+            JOptionPane.showMessageDialog(this, "This Guild no longer exists");
             throw new NullPointerException("Guild with ID " + guildID + " is null!");
+        }
         List<String> tempList = g.getTextChannels().stream().map(channel -> channel.getName() + ":" + channel.getId()).collect(Collectors.toList());
         String[] channels = new String[tempList.size()];
 

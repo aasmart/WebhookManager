@@ -163,9 +163,10 @@ public class MainConsole extends JFrameEssentials {
      * Initializes {@link MainConsole#guildPanel} containing the list of all {@link Webhook}s found within the selected
      * {@link net.dv8tion.jda.api.entities.Guild}. This list is populated by {@link MainConsole#populateList(long)}
      */
-    private boolean webhookList() {
+    public boolean webhookList() {
         // Get the list of guilds
         List<Guild> guilds = WebhookGUI.GUI.BOT.getGuilds();
+        guildPanel.removeAll();
 
         // Iterate through the guilds and create
         for(int i = 0; i < guilds.size(); i++) {
@@ -292,7 +293,7 @@ public class MainConsole extends JFrameEssentials {
 
         // Add action listener for refreshing the Webhooks on press
         refresh.addActionListener(action ->
-            webhookListPanels.keySet().forEach(this::populateList)
+            webhookList()
         );
 
         return refresh;
