@@ -26,7 +26,11 @@ public class LeaveGuild extends ListenerAdapter {
             WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.remove(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.entrySet().stream()
                     .filter(e -> e.getValue() == event.getGuild().getIdLong())
                     .collect(Collectors.toList()).get(0).getKey());
-            WebhookGUI.GUI.MAIN_CONSOLE.webhookListPanels.keySet().forEach(WebhookGUI.GUI.MAIN_CONSOLE::populateList);
+
+            // This throws an exception I can't trace so...
+            try {
+                WebhookGUI.GUI.MAIN_CONSOLE.webhookList();
+            } catch (Exception ignore) { }
         }
     }
 }
