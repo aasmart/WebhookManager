@@ -217,6 +217,9 @@ public class WebhookCreateConsole extends JFrameEssentials {
         textScroller.setBorder(BorderFactory.createEmptyBorder());
         textScroller.setPreferredSize(new Dimension(0, 60));
 
+        standardizeScrollbar(textScroller.getHorizontalScrollBar());
+        standardizeScrollbar(textScroller.getVerticalScrollBar());
+
         // Add scroll pane to the main panel
         nameField.add(textScroller);
 
@@ -268,6 +271,9 @@ public class WebhookCreateConsole extends JFrameEssentials {
         avatarFileScroll.setBorder(BorderFactory.createEmptyBorder());
         avatarFileScroll.setPreferredSize(new Dimension(0, 60));
         avatarFileScroll.setBackground(LIGHTER_MID_GRAY);
+
+        standardizeScrollbar(avatarFileScroll.getHorizontalScrollBar());
+        standardizeScrollbar(avatarFileScroll.getVerticalScrollBar());
 
         // Create the JButton for opening the file browser, and formatting
         JButton selectAvatarButton = new JButton("Find..");

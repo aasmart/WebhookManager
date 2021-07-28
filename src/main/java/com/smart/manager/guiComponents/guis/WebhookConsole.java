@@ -246,6 +246,9 @@ public class WebhookConsole extends JFrameEssentials {
         textScroller.setBorder(BorderFactory.createEmptyBorder());
         textScroller.setPreferredSize(new Dimension(0, 35));
 
+        standardizeScrollbar(textScroller.getHorizontalScrollBar());
+        standardizeScrollbar(textScroller.getVerticalScrollBar());
+
         // Add the text scroller to the main JPanel
         field.add(textScroller);
 
@@ -289,6 +292,9 @@ public class WebhookConsole extends JFrameEssentials {
         textScroller.setBorder(BorderFactory.createEmptyBorder());
         textScroller.setBackground(LIGHTER_MID_GRAY);
         textScroller.setPreferredSize(new Dimension(0, 35));
+
+        standardizeScrollbar(textScroller.getHorizontalScrollBar());
+        standardizeScrollbar(textScroller.getVerticalScrollBar());
 
         // Add text scroller to the main JPanel
         mainField.add(textScroller);
@@ -401,6 +407,9 @@ public class WebhookConsole extends JFrameEssentials {
         messageScroller.setAlignmentX(Component.CENTER_ALIGNMENT);
         messageScroller.setBorder(BorderFactory.createEmptyBorder());
         messageScroller.setBackground(LIGHTER_MID_GRAY);
+
+        standardizeScrollbar(messageScroller.getHorizontalScrollBar());
+        standardizeScrollbar(messageScroller.getVerticalScrollBar());
 
         // Create panel for the message field
         JPanel messagePanel = new JPanel();
