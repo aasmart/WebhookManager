@@ -102,11 +102,10 @@ public class JFrameEssentials extends JFrame {
     /**
      * Creates a {@link JPanel} housing a "Cancel Button" that will close the current {@link JFrame} and return the current GUI to {@link com.smart.manager.guiComponents.guis.MainConsole}
      *
-     * @param frame The {@link JFrame} the button is assigned to
      * @return A {@link JPanel} housing the button
      */
     @SuppressWarnings("DuplicatedCode")
-    public static JPanel cancel(JFrame frame) {
+    public static JPanel cancel() {
         // Create JPanel that houses the button
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(DARK_GRAY);

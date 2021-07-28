@@ -92,7 +92,7 @@ public class WebhookCreateConsole extends JFrameEssentials {
         gbc.gridy = 0;
         gbc.gridx = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
-        bottomPanel.add(cancel(this), gbc);
+        bottomPanel.add(cancel(), gbc);
         mainConsole.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 
         mainConsole.validate();
@@ -419,13 +419,14 @@ public class WebhookCreateConsole extends JFrameEssentials {
 
             // Do checks for fields
             if (username.length() == 0)
-                JOptionPane.showMessageDialog(this, "Username must be longer than 0 characters.");
+                JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Username must be longer than 0 characters.");
             else if (channelID.length() == 0)
-                JOptionPane.showMessageDialog(this, "Must specify channel.");
+                JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Must specify channel.");
             else {
                 if (Webhook.createWebhook(username, avatarFile, channelID)) {
-                    WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
-                    this.dispose();
+                    WebhookGUI.GUI.MAIN_CONSOLE.updateMainConsole();
+                    if(Boolean.parseBoolean(WebhookGUI.managerProperties.getProperty("success-popups")))
+                        JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Webhook created!");
                 }
             }
         });

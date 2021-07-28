@@ -455,9 +455,11 @@ public class WebhookConsole extends JFrameEssentials {
                                     message,
                                     attachments,
                                     id,
-                                    token))
-                                JOptionPane.showMessageDialog(this, "Your message was sent!");
-                            else
+                                    token)
+                            ) {
+                                if(Boolean.parseBoolean(WebhookGUI.managerProperties.getProperty("success-popups")))
+                                    JOptionPane.showMessageDialog(this, "Your message was sent!");
+                            } else
                                 JOptionPane.showMessageDialog(this, "Your message could not be sent! Consider checking the " +
                                         "status of the bot and the webhook you are attempting to use.");
 
@@ -494,7 +496,7 @@ public class WebhookConsole extends JFrameEssentials {
         gbc.weightx = .1;
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 1;
-        buttonPanel.add(cancel(this), gbc);
+        buttonPanel.add(cancel(), gbc);
 
         // Add button panel to the frame
         WebhookGUI.GUI.MAIN_CONSOLE.add(buttonPanel, BorderLayout.SOUTH);

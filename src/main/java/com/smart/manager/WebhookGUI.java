@@ -230,6 +230,7 @@ public class WebhookGUI {
         Properties p = new Properties();
         p.put("activity-type", "Playing");
         p.put("activity-desc", "with Webhooks");
+        p.put("success-popups", true);
 
         return p;
     }

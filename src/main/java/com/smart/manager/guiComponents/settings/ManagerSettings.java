@@ -10,7 +10,9 @@ import com.smart.manager.WebhookGUI;
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -30,6 +32,7 @@ public class ManagerSettings extends JFrameEssentials {
         // Add the possible settings
         settings.add(botToken());
         settings.add(botStatus());
+        settings.add(successPopups());
 
         return settings.stream().map(Setting::new).collect(Collectors.toList());
     }
@@ -81,6 +84,7 @@ public class ManagerSettings extends JFrameEssentials {
 
             reveal.addActionListener(click -> {
                 tokenScroll.setVisible(!tokenScroll.isVisible());
+                reveal.setText(tokenScroll.isVisible() ? "Hide" : "Reveal");
                 WebhookGUI.GUI.MAIN_CONSOLE.revalidate();
                 WebhookGUI.GUI.MAIN_CONSOLE.repaint();
             });
@@ -252,6 +256,63 @@ public class ManagerSettings extends JFrameEssentials {
             gbc.weightx = .05;
             gbc.insets = new Insets(0,0,0,0);
             settingsContents.add(save, gbc);
+
+            // Add title/settingsContents
+            mainPanel.add(label);
+            mainPanel.add(settingsContents);
+
+            return mainPanel;
+        };
+    }
+
+    /**
+     * The setting for toggling if success popups occur
+     * @return A {@link Supplier} with the instructions to create the {@link JPanel}/{@link Setting}
+     */
+    private static Supplier<JPanel> successPopups() {
+        return () -> {
+            // Create main panel
+            JPanel mainPanel = new JPanel();
+            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+            mainPanel.setBackground(MID_GRAY);
+
+            // Title Label
+            JLabel label = new JLabel("Success Popups");
+            label.setFont(new Font("Calibri",Font.BOLD,36));
+            label.setForeground(WHITE);
+            label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            label.setPreferredSize(new Dimension(200, 40));
+
+            // JPanel for the "contents" of the setting
+            JPanel settingsContents = new JPanel(new GridBagLayout());
+            settingsContents.setBackground(null);
+
+            // "Toggle Enabled" Button
+            boolean enabled = Boolean.parseBoolean(WebhookGUI.managerProperties.getProperty("success-popups"));
+            JButton togglePopups = new JButton(enabled ? "Enabled" : "Disabled");
+            togglePopups.setBackground(BLURPLE);
+            togglePopups.setForeground(enabled ? GREEN : RED);
+            togglePopups.setBorder(new RoundedBorder(DARK_GRAY, 2, 16));
+            togglePopups.setFont(new Font("Calibri",Font.BOLD,20));
+            togglePopups.setFocusable(false);
+            setHoverBrightnessChange(togglePopups, .25f);
+
+            togglePopups.addActionListener(click -> {
+                boolean isEnabled = togglePopups.getText().equals("Enabled");
+                togglePopups.setText(!isEnabled ? "Enabled" : "Disabled");
+                togglePopups.setForeground(!isEnabled ? GREEN : RED);
+
+                // Update the properties
+                WebhookGUI.managerProperties.put("success-popups", String.valueOf(!isEnabled));
+                WebhookGUI.writeProperties(WebhookGUI.managerProperties);
+            });
+
+            // GBC for formatting
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.weightx = 1;
+            gbc.weighty = 1;
+            settingsContents.add(togglePopups, gbc);
 
             // Add title/settingsContents
             mainPanel.add(label);

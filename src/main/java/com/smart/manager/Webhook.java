@@ -344,7 +344,8 @@ public class Webhook extends JFrameEssentials {
             WebhookGUI.GUI.BOT.retrieveWebhookById(id).queue(webhook ->
                 webhook.delete().queue(success -> {
                     WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
-                    JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Successfully deleted the Webhook!");
+                    if(Boolean.parseBoolean(WebhookGUI.managerProperties.getProperty("success-popups")))
+                        JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "Successfully deleted the Webhook!");
                 })
         ));
 
