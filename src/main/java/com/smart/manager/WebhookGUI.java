@@ -4,6 +4,7 @@ import com.smart.manager.events.JoinGuild;
 import com.smart.manager.events.LeaveGuild;
 import com.smart.manager.events.Startup;
 import com.smart.manager.guiComponents.guis.MainConsole;
+import com.smart.manager.guiComponents.popups.NoGuildsPopUp;
 import com.smart.manager.guiComponents.popups.TokenPopUp;
 import com.smart.manager.guiComponents.settings.ManagerSettings;
 import com.smart.manager.guiComponents.settings.Setting;
@@ -54,6 +55,7 @@ public class WebhookGUI {
         if(token == null || token.length() == 0)
             return;
 
+        new NoGuildsPopUp();
         managerProperties = readProperties();
 
         try {
