@@ -351,7 +351,7 @@ public class MainConsole extends JFrameEssentials {
         try {
             g.retrieveWebhooks().queue(rawWebhooks -> {
                 // Create the list of Webhooks
-                List<Webhook> webhooks = rawWebhooks.stream().map(hook -> new Webhook(hook.getName(), hook.getToken(), hook.getId(), hook.getChannel().getId())).collect(Collectors.toList());
+                List<Webhook> webhooks = rawWebhooks.stream().map(hook -> new Webhook(hook.getName(), hook.getToken(), hook.getId(), hook.getChannel().getId(), hook.getGuild())).collect(Collectors.toList());
 
                 // Create GBC for formatting
                 GridBagConstraints gbc = new GridBagConstraints();

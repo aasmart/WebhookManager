@@ -1,13 +1,17 @@
 package com.smart.manager;
 
+import com.smart.manager.utils.OctetBody;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 /**
  * The class for housing the various
@@ -29,7 +33,7 @@ public class DiscordAPI {
      * @return A boolean for indicating if the message was sent
      * @throws IOException If there was an error executing the HTTP Request
      */
-    public static boolean sendMessage(String username, String avatar, String message, String id, String token) throws IOException {
+    public static boolean sendMessage(String username, String avatar, String message, List<File> attachments, String id, String token) throws IOException {
         JSONObject body = new JSONObject();
         body.put("allowed_mentions", new JSONObject().put("parse", new JSONArray().putAll(new String[]{"users", "roles", "everyone"})));
 
@@ -43,15 +47,37 @@ public class DiscordAPI {
                 body.put("avatar_url", avatar);
         }
 
-        // Post Request
-        RequestBody formBody = RequestBody.create(body.toString(), MediaType.parse("application/json; charset=utf-8"));
+        // Special case for when attachments are present
+        if(attachments.size() > 0) {
+            final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            for(int i = 0; i < attachments.size(); i++) {
+                try {
+                    byte[] bytes = new FileInputStream(attachments.get(i)).readAllBytes();
+                    builder.addFormDataPart("file" + i, attachments.get(i).getName(), new OctetBody(bytes));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-        Request request = new Request.Builder()
-                .url(BASE_URL + "/webhooks" + "/" + id + "/" + token)
-                .post(formBody)
-                .build();
+            Request request = new Request.Builder()
+                    .url(BASE_URL + "/webhooks" + "/" + id + "/" + token)
+                    .post(builder.addFormDataPart("payload_json", body.toString()).build())
+                    .build();
 
-        Call call = new OkHttpClient().newCall(request);
-        return call.execute().isSuccessful();
+            Call call = new OkHttpClient().newCall(request);
+            Response r = call.execute();
+            return r.isSuccessful();
+        } else {
+            // Post Request
+            RequestBody formBody = RequestBody.create(body.toString(), MediaType.parse("application/json; charset=utf-8"));
+
+            Request request = new Request.Builder()
+                    .url(BASE_URL + "/webhooks" + "/" + id + "/" + token)
+                    .post(formBody)
+                    .build();
+
+            Call call = new OkHttpClient().newCall(request);
+            return call.execute().isSuccessful();
+        }
     }
 }
