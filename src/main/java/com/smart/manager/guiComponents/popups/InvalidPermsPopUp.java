@@ -29,18 +29,18 @@ public class InvalidPermsPopUp extends JFrameEssentials {
 
         // Create JPanel for explaining the popup
         JPanel explanation = new JPanel();
-        explanation.setBackground(NOT_QUITE_BLACK);
+        explanation.setBackground(MID_GRAY);
         explanation.setLayout(new GridBagLayout());
 
         // Create text pane for the explanation text
         JTextPane text = new JTextPane();
         text.setText(message + ". Give the bot the given permission and hit refresh.");
-        text.setBackground(NOT_QUITE_BLACK);
+        text.setBackground(MID_GRAY);
         text.setEditable(false);
 
         // Setup scroll pane
         JScrollPane scrollPane = new JScrollPane(text);
-        scrollPane.setBackground(NOT_QUITE_BLACK);
+        scrollPane.setBackground(MID_GRAY);
         scrollPane.setBorder(null);
 
         JScrollBar horizontalBar = scrollPane.getHorizontalScrollBar();

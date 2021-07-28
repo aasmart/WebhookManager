@@ -61,13 +61,13 @@ public class TokenPopUp extends JFrameEssentials {
 
         // Create explanation JPanel
         JPanel explanation = new JPanel();
-        explanation.setBackground(NOT_QUITE_BLACK);
+        explanation.setBackground(MID_GRAY);
         explanation.setLayout(new GridBagLayout());
 
         // Create the text for explaining the popup
         JTextPane titleTextPane = new JTextPane();
         titleTextPane.setText(titleText);
-        titleTextPane.setBackground(NOT_QUITE_BLACK);
+        titleTextPane.setBackground(MID_GRAY);
         titleTextPane.setEditable(false);
 
         // Text Pane Attributes
@@ -95,10 +95,10 @@ public class TokenPopUp extends JFrameEssentials {
 
         // The token field
         JTextField tokenField = new JTextField();
-        tokenField.setBackground(GRAY);
-        tokenField.setForeground(NOT_QUITE_BLACK);
+        tokenField.setBackground(LIGHTER_MID_GRAY);
+        tokenField.setForeground(WHITE);
         tokenField.setFont(new Font("Calibri",Font.PLAIN,18));
-        tokenField.setBorder(BorderFactory.createEmptyBorder());
+        tokenField.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
 
         // Create scrolling for token field
         JScrollPane tokenScroll = new JScrollPane(tokenField);
@@ -169,7 +169,7 @@ public class TokenPopUp extends JFrameEssentials {
 
         // JPanel for the buttons
         JPanel buttonsPanel = new JPanel(new GridBagLayout());
-        buttonsPanel.setBackground(NOT_QUITE_BLACK);
+        buttonsPanel.setBackground(MID_GRAY);
 
         // Updated constraints add add the submit/cancel JButtons
         gbc.weighty = 1;

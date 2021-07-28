@@ -133,10 +133,7 @@ public class JFrameEssentials extends JFrame {
         }
 
         // Add action listener for once the button is pressed
-        cancelButton.addActionListener(event -> {
-            WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
-            frame.dispose();
-        });
+        cancelButton.addActionListener(event -> WebhookGUI.GUI.MAIN_CONSOLE.updateMainConsole());
 
         // Created GBC for formatting
         GridBagConstraints gbc = new GridBagConstraints();

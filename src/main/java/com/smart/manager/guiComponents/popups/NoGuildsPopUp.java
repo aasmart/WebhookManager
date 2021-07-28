@@ -28,13 +28,13 @@ public class NoGuildsPopUp extends JFrameEssentials {
 
         // Create JPanel for explaining the popup
         JPanel explanation = new JPanel();
-        explanation.setBackground(NOT_QUITE_BLACK);
+        explanation.setBackground(MID_GRAY);
         explanation.setLayout(new GridBagLayout());
 
         // Create text pane for the explanation text
         JTextPane text = new JTextPane();
         text.setText("In order to use the webhook console your bot must be in at least one server!");
-        text.setBackground(NOT_QUITE_BLACK);
+        text.setBackground(MID_GRAY);
         text.setEditable(false);
 
         // Text Pane Attributes
