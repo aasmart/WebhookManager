@@ -541,7 +541,7 @@ public class WebhookConsole extends JFrameEssentials {
         standardizeScrollbar(attachmentScroll.getHorizontalScrollBar());
 
         // Create the JButton for opening the file browser, and formatting
-        JButton selectAttachmentButton = new JButton("Find..");
+        JButton selectAttachmentButton = new JButton("Find... (0/10 Attachments; 0.0/8.0MB)");
         selectAttachmentButton.setToolTipText("Select attachment");
         selectAttachmentButton.setBackground(BLURPLE);
         selectAttachmentButton.setForeground(WHITE);
@@ -567,15 +567,22 @@ public class WebhookConsole extends JFrameEssentials {
                 JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "You have reached the maximum of 10 attachments!");
             else if (fileChooser.showDialog(this, "Load") == JFileChooser.APPROVE_OPTION) {
                 attachments.add(fileChooser.getSelectedFile());
-                if (attachments.stream().mapToLong(File::length).sum() > maxFileSize) {
+                long currentSize = attachments.stream().mapToLong(File::length).sum();
+                if (currentSize > maxFileSize) {
                     JOptionPane.showMessageDialog(
                             WebhookGUI.GUI.MAIN_CONSOLE,
-                            "This file could not be added as it exceeds the file size of " + MiscUtils.bytesToMegabyte(maxFileSize) + "MB " +
-                                    "for this Webhook's Guild."
+                            "This file could not be added as it exceeds the file size of " +
+                                    String.format("%.2fMB", MiscUtils.bytesToMegabyte(maxFileSize)) + " for this Webhook's Guild."
                     );
                     attachments.remove(attachments.size() - 1);
-                } else
+                } else {
+                    selectAttachmentButton.setText(String.format("Find... (%d/10 Attachments; %.1f/%.1fMB)",
+                            attachments.size(),
+                            MiscUtils.bytesToMegabyte(currentSize),
+                            MiscUtils.bytesToMegabyte(maxFileSize)
+                    ));
                     updateAttachmentList(selectAttachmentButton);
+                }
             }
         });
 
@@ -627,8 +634,8 @@ public class WebhookConsole extends JFrameEssentials {
             for (int i = attachments.size() - 1; i >= 0; i--)
                 attachmentListPanel.add(createAttachmentPanel(attachments.get(i), i, addButton), gbc, 0);
 
-        getContentPane().validate();
-        getContentPane().repaint();
+        WebhookGUI.GUI.MAIN_CONSOLE.getContentPane().validate();
+        WebhookGUI.GUI.MAIN_CONSOLE.getContentPane().repaint();
     }
 
     /**
@@ -684,6 +691,12 @@ public class WebhookConsole extends JFrameEssentials {
 
         removeSelectionButton.addActionListener(event -> {
             attachments.remove(pos);
+            selectAttachmentButton.setText(String.format("Find... (%d/10 Attachments; %.1f/%.1fMB)",
+                    attachments.size(),
+                    MiscUtils.bytesToMegabyte(attachments.stream().mapToLong(File::length).sum()),
+                    MiscUtils.bytesToMegabyte(guild.getMaxFileSize())
+            ));
+
             updateAttachmentList(selectAttachmentButton);
         });
 

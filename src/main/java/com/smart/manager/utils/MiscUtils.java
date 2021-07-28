@@ -9,7 +9,7 @@ public class MiscUtils {
      * @param bytes The amount of bytes
      * @return The amount of megabytes
      */
-    public static long bytesToMegabyte(long bytes) {
-        return bytes / 1000000;
+    public static double bytesToMegabyte(long bytes) {
+        return bytes / 1000000.0;
     }
 }
