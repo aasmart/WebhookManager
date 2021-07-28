@@ -41,23 +41,31 @@ public class WebhookCreateConsole extends JFrameEssentials {
      */
     private final long guildID;
 
+    /**
+     * Creates a {@link WebhookCreateConsole} which is for creating {@link Webhook Webhooks}
+     * @param guildID The ID of the {@link Guild} the {@link Webhook} is being created in
+     */
     public WebhookCreateConsole(long guildID) {
         this.guildID = guildID;
 
+        updateMainConsole();
+    }
+
+    public void updateMainConsole() {
+        MainConsole mainConsole = WebhookGUI.GUI.MAIN_CONSOLE;
+        mainConsole.getContentPane().removeAll();
+
         // Basic settings for JFrame
-        setTitle("Webhook Creator");
-        setSize(1100, 600);
-        setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
-        setBackground(NOT_QUITE_BLACK);
+        mainConsole.getContentPane().setLayout(new BorderLayout());
+        mainConsole.getContentPane().setBackground(NOT_QUITE_BLACK);
 
         // Add JPanels to JFrame
-        add(frameTitle(), BorderLayout.NORTH);
-        add(createPanel(), BorderLayout.CENTER);
+        mainConsole.getContentPane().add(frameTitle(), BorderLayout.NORTH);
+        mainConsole.getContentPane().add(createPanel(), BorderLayout.CENTER);
 
         // Padding
-        add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
-        add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        mainConsole.getContentPane().add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
+        mainConsole.getContentPane().add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
 
         // Create GBC for formatting
         GridBagConstraints gbc = new GridBagConstraints();
@@ -82,18 +90,10 @@ public class WebhookCreateConsole extends JFrameEssentials {
         gbc.gridx = 1;
         gbc.insets = new Insets(20, 5, 20, 40);
         bottomPanel.add(cancel(this), gbc);
-        add(bottomPanel, BorderLayout.SOUTH);
+        mainConsole.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 
-        // Add window close listener
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
-            }
-        });
-
-        setVisible(true);
-        getContentPane().repaint();
+        mainConsole.validate();
+        mainConsole.repaint();
     }
 
     /**

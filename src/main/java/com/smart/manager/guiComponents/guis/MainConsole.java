@@ -46,9 +46,7 @@ public class MainConsole extends JFrameEssentials {
         // Setup basic console
         setTitle("Webhook Viewer");
         setResizable(true);
-        setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(NOT_QUITE_BLACK);
 
         // Update UI
         UIManager.put("OptionPane.background", NOT_QUITE_BLACK);
@@ -64,6 +62,23 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("TabbedPane.darkShadow", NOT_QUITE_BLACK);
         UIManager.put("TextField.caretForeground", WHITE);
         UIManager.put("TextField.caretBackground", WHITE);
+
+        setSize(700, 700);
+        setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setVisible(true);
+        updateMainConsole();
+    }
+
+    /**
+     * Updates the GUI's Main display panel
+     */
+    public void updateMainConsole() {
+        MainConsole mainConsole = WebhookGUI.GUI.MAIN_CONSOLE;
+        mainConsole.getContentPane().removeAll();
+
+        mainConsole.getContentPane().setLayout(new BorderLayout());
+        mainConsole.getContentPane().setBackground(NOT_QUITE_BLACK);
 
         // Panel for the webhook list and such
         JPanel mainConsolePanel = new JPanel(new BorderLayout());
@@ -102,13 +117,10 @@ public class MainConsole extends JFrameEssentials {
 
         // Add various panels
         mainConsolePanel.add(centerPanel, BorderLayout.CENTER);
-        getContentPane().add(mainConsolePanel);
+        mainConsole.getContentPane().add(mainConsolePanel);
 
-        setSize(700, 700);
-        setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setVisible(true);
-        getContentPane().repaint();
+        mainConsole.validate();
+        mainConsole.repaint();
     }
 
     /**
@@ -149,6 +161,10 @@ public class MainConsole extends JFrameEssentials {
         return paddingPanel;
     }
 
+    /**
+     * Creates the {@link JTabbedPane} containing all the {@link Guild Guilds} and {@link Webhook Webhooks}
+     * @return A {@link JTabbedPane}
+     */
     private JTabbedPane createGuildPanel() {
         guildPanel = new JTabbedPane();
         guildPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -258,10 +274,7 @@ public class MainConsole extends JFrameEssentials {
         addButton.setBorder(new RoundedBorder(NOT_QUITE_BLACK,0,16));
 
         // Add action listener for creating the new webhooks once clicking the button
-        addButton.addActionListener(event -> {
-            new WebhookCreateConsole(tabGuildIDMap.get(guildPanel.getSelectedIndex()));
-            setEnabled(false);
-        });
+        addButton.addActionListener(event -> new WebhookCreateConsole(tabGuildIDMap.get(guildPanel.getSelectedIndex())));
 
         return addButton;
     }

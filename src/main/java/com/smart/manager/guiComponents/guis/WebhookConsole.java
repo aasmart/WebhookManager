@@ -80,6 +80,9 @@ public class WebhookConsole extends JFrameEssentials {
         updateMainConsole();
     }
 
+    /**
+     * Updates the GUI's Main display panel
+     */
     private void updateMainConsole() {
         MainConsole mainConsole = WebhookGUI.GUI.MAIN_CONSOLE;
         mainConsole.getContentPane().removeAll();
@@ -90,7 +93,7 @@ public class WebhookConsole extends JFrameEssentials {
 
         // Add important components
         mainConsole.getContentPane().add(frameTitle(), BorderLayout.NORTH);
-        JPanel userInputPanel = userInputPanel();
+        JScrollPane userInputPanel = userInputPanel();
         if (userInputPanel == null)
             return;
         mainConsole.getContentPane().add(userInputPanel, BorderLayout.CENTER);
@@ -134,7 +137,7 @@ public class WebhookConsole extends JFrameEssentials {
      *
      * @return A {@link JPanel}
      */
-    private JPanel userInputPanel() {
+    private JScrollPane userInputPanel() {
         // Create the main JPanel and formatting
         JPanel panel = new JPanel();
         panel.setBackground(MID_GRAY);
@@ -202,7 +205,7 @@ public class WebhookConsole extends JFrameEssentials {
         standardizeScrollbar(inputScroll.getHorizontalScrollBar());
         standardizeScrollbar(inputScroll.getVerticalScrollBar());
 
-        return panel;
+        return inputScroll;
     }
 
     /**
@@ -294,8 +297,8 @@ public class WebhookConsole extends JFrameEssentials {
     }
 
     /**
-     *
-     * @return
+     * Creates the {@link JPanel} for the {@link Webhook Webhook's} Channel ID
+     * @return A {@link JPanel}
      */
     @SuppressWarnings("DuplicatedCode")
     private JPanel channelIDField() {
@@ -485,7 +488,7 @@ public class WebhookConsole extends JFrameEssentials {
         buttonPanel.add(cancel(this), gbc);
 
         // Add button panel to the frame
-        add(buttonPanel, BorderLayout.SOUTH);
+        WebhookGUI.GUI.MAIN_CONSOLE.add(buttonPanel, BorderLayout.SOUTH);
 
         // Add the message field to the main JPanel
         mainMessagePanel.add(messagePanel);
