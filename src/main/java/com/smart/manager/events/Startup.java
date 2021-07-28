@@ -26,6 +26,6 @@ public class Startup extends ListenerAdapter {
             return;
         }
         WebhookGUI.settings = ManagerSettings.compileSettings();
-        new MainConsole();
+        WebhookGUI.GUI.MAIN_CONSOLE = new MainConsole();
     }
 }

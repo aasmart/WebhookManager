@@ -77,34 +77,30 @@ public class WebhookConsole extends JFrameEssentials {
         this.guild = guild;
         attachments = new ArrayList<>();
 
+        updateMainConsole();
+    }
+
+    private void updateMainConsole() {
+        MainConsole mainConsole = WebhookGUI.GUI.MAIN_CONSOLE;
+        mainConsole.getContentPane().removeAll();
+
         // Basic formatting for the JFrame
-        setTitle("Webhook Message Console");
-        setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
-        setBackground(NOT_QUITE_BLACK);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mainConsole.getContentPane().setLayout(new BorderLayout());
+        mainConsole.getContentPane().setBackground(NOT_QUITE_BLACK);
 
         // Add important components
-        add(frameTitle(), BorderLayout.NORTH);
-        JScrollPane userInputPanel = userInputPanel();
+        mainConsole.getContentPane().add(frameTitle(), BorderLayout.NORTH);
+        JPanel userInputPanel = userInputPanel();
         if (userInputPanel == null)
             return;
-        add(userInputPanel, BorderLayout.CENTER);
+        mainConsole.getContentPane().add(userInputPanel, BorderLayout.CENTER);
 
         // Create padding
-        add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
-        add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
+        mainConsole.getContentPane().add(padding(NOT_QUITE_BLACK), BorderLayout.WEST);
+        mainConsole.getContentPane().add(padding(NOT_QUITE_BLACK), BorderLayout.EAST);
 
-        // Create listener for window closing event
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                WebhookGUI.GUI.MAIN_CONSOLE.populateList(WebhookGUI.GUI.MAIN_CONSOLE.tabGuildIDMap.get(WebhookGUI.GUI.MAIN_CONSOLE.guildPanel.getSelectedIndex()));
-                WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(true);
-            }
-        });
-
-        setVisible(true);
+        mainConsole.validate();
+        mainConsole.repaint();
     }
 
     /**
@@ -138,7 +134,7 @@ public class WebhookConsole extends JFrameEssentials {
      *
      * @return A {@link JPanel}
      */
-    private JScrollPane userInputPanel() {
+    private JPanel userInputPanel() {
         // Create the main JPanel and formatting
         JPanel panel = new JPanel();
         panel.setBackground(MID_GRAY);
@@ -206,7 +202,7 @@ public class WebhookConsole extends JFrameEssentials {
         standardizeScrollbar(inputScroll.getHorizontalScrollBar());
         standardizeScrollbar(inputScroll.getVerticalScrollBar());
 
-        return inputScroll;
+        return panel;
     }
 
     /**
@@ -297,6 +293,10 @@ public class WebhookConsole extends JFrameEssentials {
         return mainField;
     }
 
+    /**
+     *
+     * @return
+     */
     @SuppressWarnings("DuplicatedCode")
     private JPanel channelIDField() {
         // Create main JPanel

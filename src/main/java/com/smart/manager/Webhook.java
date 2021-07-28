@@ -303,10 +303,7 @@ public class Webhook extends JFrameEssentials {
         }
 
         // Add action listener for managing the webhook on click
-        load.addActionListener(event -> {
-            WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(false);
-            new WebhookConsole(id, token, guild);
-        });
+        load.addActionListener(event -> new WebhookConsole(id, token, guild));
         return load;
     }
 
