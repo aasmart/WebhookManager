@@ -51,6 +51,9 @@ public class WebhookCreateConsole extends JFrameEssentials {
         updateMainConsole();
     }
 
+    /**
+     * Updates the GUI's Main display panel
+     */
     public void updateMainConsole() {
         MainConsole mainConsole = WebhookGUI.GUI.MAIN_CONSOLE;
         mainConsole.getContentPane().removeAll();

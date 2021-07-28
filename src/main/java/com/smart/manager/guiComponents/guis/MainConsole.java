@@ -63,7 +63,7 @@ public class MainConsole extends JFrameEssentials {
         UIManager.put("TextField.caretForeground", WHITE);
         UIManager.put("TextField.caretBackground", WHITE);
 
-        setSize(700, 700);
+        setSize(1000, 700);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
