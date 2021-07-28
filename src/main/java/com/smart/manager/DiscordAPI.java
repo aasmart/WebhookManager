@@ -65,7 +65,8 @@ public class DiscordAPI {
                     .build();
 
             Call call = new OkHttpClient().newCall(request);
-            return call.execute().isSuccessful();
+            Response r = call.execute();
+            return r.isSuccessful();
         } else {
             // Post Request
             RequestBody formBody = RequestBody.create(body.toString(), MediaType.parse("application/json; charset=utf-8"));

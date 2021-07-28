@@ -4,6 +4,7 @@ import com.smart.manager.guiComponents.JFrameEssentials;
 import com.smart.manager.guiComponents.RoundedBorder;
 import com.smart.manager.guiComponents.guis.WebhookConsole;
 import com.smart.manager.guiComponents.guis.WebhookCreateConsole;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -39,11 +40,25 @@ public class Webhook extends JFrameEssentials {
      */
     private final String channelID;
 
-    public Webhook(String name, String token, String id, String channelID) {
+    /**
+     * The {@link Guild} the Webhook is in
+     */
+    private final Guild guild;
+
+    /**
+     * Creates a Webhook
+     * @param name The name of the Webhook
+     * @param token The Webhook's token
+     * @param id The Webhook's ID
+     * @param channelID The channel the Webhook is in
+     * @param guild The Guild the Webhooks is in
+     */
+    public Webhook(String name, String token, String id, String channelID, Guild guild) {
         this.name = name;
         this.token = token;
         this.id = id;
         this.channelID = channelID;
+        this.guild = guild;
     }
 
     /**
@@ -290,7 +305,7 @@ public class Webhook extends JFrameEssentials {
         // Add action listener for managing the webhook on click
         load.addActionListener(event -> {
             WebhookGUI.GUI.MAIN_CONSOLE.setEnabled(false);
-            new WebhookConsole(id, token);
+            new WebhookConsole(id, token, guild);
         });
         return load;
     }

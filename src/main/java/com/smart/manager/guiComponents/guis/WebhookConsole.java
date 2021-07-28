@@ -6,6 +6,7 @@ import com.smart.manager.WebhookGUI;
 import com.smart.manager.guiComponents.JFrameEssentials;
 import com.smart.manager.guiComponents.LimitDocumentFilter;
 import com.smart.manager.guiComponents.RoundedBorder;
+import com.smart.manager.utils.MiscUtils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +34,9 @@ public class WebhookConsole extends JFrameEssentials {
      */
     private JTextField avatarURL = null;
 
+    /**
+     * The field for the ID of the {@link TextChannel} to send the message to
+     */
     private JComboBox<String> channelIDField;
 
     /**
@@ -46,19 +50,31 @@ public class WebhookConsole extends JFrameEssentials {
     private final String token;
 
     /**
-     * The list containing the attached files
+     * The {@link Guild} the {@link Webhook} is in
      */
-    private List<File> attachments;
+    private final Guild guild;
 
     /**
-     * The basic constructor for the {@link WebhookConsole} {@link JFrame}.
+     * The list containing the attached files
+     */
+    private final List<File> attachments;
+
+    /**
+     * The {@link JPanel} containing the list of attachments
+     */
+    private JPanel attachmentListPanel;
+
+    /**
+     * The basic constructor for the {@link WebhookConsole} {@link JFrame}
      *
      * @param id    The ID of the {@link Webhook} the user is managing
      * @param token The token of the {@link Webhook} the user is managing
+     * @param guild The {@link Guild} the {@link Webhook} is in
      */
-    public WebhookConsole(String id, String token) {
+    public WebhookConsole(String id, String token, Guild guild) {
         this.id = id;
         this.token = token;
+        this.guild = guild;
         attachments = new ArrayList<>();
 
         // Basic formatting for the JFrame
@@ -178,9 +194,10 @@ public class WebhookConsole extends JFrameEssentials {
         message.setPreferredSize(new Dimension(0, 400));
         panel.add(message, gbc);
 
+        // Add field for adding attachments
         gbc.gridy = 2;
         JPanel attachmentField = attachmentField();
-        attachmentField.setPreferredSize(new Dimension(0, 150));
+        attachmentField.setPreferredSize(new Dimension(0, 550));
         panel.add(attachmentField, gbc);
 
         JScrollPane inputScroll = new JScrollPane(panel);
@@ -476,7 +493,6 @@ public class WebhookConsole extends JFrameEssentials {
         return mainMessagePanel;
     }
 
-
     /**
      * Creates the field for selecting the {@link File} attachment
      *
@@ -508,31 +524,29 @@ public class WebhookConsole extends JFrameEssentials {
         subPanel.setBackground(MID_GRAY);
         subPanel.setLayout(new GridBagLayout());
 
-        // Creates the JTextField which will contain the name of the file, and formatting
-        JTextField attachmentFileField = new JTextField();
-        attachmentFileField.setBackground(LIGHTER_MID_GRAY);
-        attachmentFileField.setForeground(WHITE);
-        attachmentFileField.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
-        attachmentFileField.setFont(new Font("Calibri", Font.PLAIN, 20));
-        attachmentFileField.setText("No attachment selected...");
-        attachmentFileField.setEditable(false);
+        // Creates the JPanel which will contain the name of the file, and formatting
+        attachmentListPanel = new JPanel(new GridBagLayout());
+        attachmentListPanel.setBackground(LIGHTER_MID_GRAY);
+        attachmentListPanel.setBorder(BorderFactory.createEmptyBorder());
 
         // Create the JScrollPane for the attachment file name field
-        JScrollPane attachmentScroll = new JScrollPane(attachmentFileField);
-        attachmentScroll.setBorder(BorderFactory.createEmptyBorder());
-        attachmentScroll.setPreferredSize(new Dimension(0, 35));
+        JScrollPane attachmentScroll = new JScrollPane(attachmentListPanel);
+        attachmentScroll.setBorder(BorderFactory.createLineBorder(DARK_GRAY, 2));
+        attachmentScroll.setPreferredSize(new Dimension(0, 500));
         attachmentScroll.setBackground(LIGHTER_MID_GRAY);
+        standardizeScrollbar(attachmentScroll.getVerticalScrollBar());
+        standardizeScrollbar(attachmentScroll.getHorizontalScrollBar());
 
         // Create the JButton for opening the file browser, and formatting
         JButton selectAttachmentButton = new JButton("Find..");
         selectAttachmentButton.setToolTipText("Select attachment");
         selectAttachmentButton.setBackground(BLURPLE);
         selectAttachmentButton.setForeground(WHITE);
-        selectAttachmentButton.setFont(new Font("Calibri", Font.BOLD, 16));
-        selectAttachmentButton.setBorder(new RoundedBorder(DARK_GRAY, 2, 4));
+        selectAttachmentButton.setFont(new Font("Calibri", Font.BOLD, 24));
+        selectAttachmentButton.setBorder(new RoundedBorder(DARK_GRAY, 2, 16));
         setHoverBrightnessChange(selectAttachmentButton, .25f);
         selectAttachmentButton.setFocusable(false);
-        selectAttachmentButton.setPreferredSize(new Dimension(0, 0));
+        selectAttachmentButton.setPreferredSize(new Dimension(0, 75));
 
         // File chooser
         JFileChooser fileChooser = new JFileChooser();
@@ -544,56 +558,143 @@ public class WebhookConsole extends JFrameEssentials {
         // Add the action listener for opening the JFileChooser once the "Choose File" button is pressed
         selectAttachmentButton.addActionListener(event -> {
             fileChooser.getActionMap().get("viewTypeDetails").actionPerformed(null);
-            if(attachments.size() >= 10)
+
+            long maxFileSize = guild.getMaxFileSize();
+            if (attachments.size() >= 10)
                 JOptionPane.showMessageDialog(WebhookGUI.GUI.MAIN_CONSOLE, "You have reached the maximum of 10 attachments!");
-            else if(fileChooser.showDialog(this, "Load") == JFileChooser.APPROVE_OPTION) {
+            else if (fileChooser.showDialog(this, "Load") == JFileChooser.APPROVE_OPTION) {
                 attachments.add(fileChooser.getSelectedFile());
-                attachmentFileField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+                if (attachments.stream().mapToLong(File::length).sum() > maxFileSize) {
+                    JOptionPane.showMessageDialog(
+                            WebhookGUI.GUI.MAIN_CONSOLE,
+                            "This file could not be added as it exceeds the file size of " + MiscUtils.bytesToMegabyte(maxFileSize) + "MB " +
+                                    "for this Webhook's Guild."
+                    );
+                    attachments.remove(attachments.size() - 1);
+                } else
+                    updateAttachmentList(selectAttachmentButton);
             }
-        });
-
-        // Button for removing the selected attachment
-        JButton removeSelectionButton = new JButton("Remove Selection");
-        removeSelectionButton.setBackground(RED);
-        removeSelectionButton.setForeground(WHITE);
-        removeSelectionButton.setBorder(new RoundedBorder(DARK_GRAY, 2, 4));
-        removeSelectionButton.setFont(new Font("Calibri", Font.BOLD, 16));
-        setHoverBrightnessChange(removeSelectionButton, .25f);
-        removeSelectionButton.setFocusable(false);
-        removeSelectionButton.setPreferredSize(new Dimension(0, 0));
-
-        removeSelectionButton.addActionListener(event -> {
-            attachments.remove(attachments.size() - 1);
-            if(attachments.size() != 0)
-                attachmentFileField.setText(attachments.get(attachments.size() - 1).getAbsolutePath());
-            else
-                attachmentFileField.setText("No attachments selected...");
         });
 
         // Create GBC for formatting and add the avatar JScrollPane
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = .7;
+        gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.gridy = 0;
         subPanel.add(attachmentScroll, gbc);
 
-        // JPanel for button
-        JPanel avatarButtonPanel = new JPanel(new BorderLayout());
-        avatarButtonPanel.setOpaque(false);
-        avatarButtonPanel.add(selectAttachmentButton, BorderLayout.CENTER);
-
-        // Update GBC and add the button
-        gbc.weightx = .15;
-        gbc.insets = new Insets(0, 10, 0, 0);
-        subPanel.add(avatarButtonPanel, gbc);
-
-        subPanel.add(removeSelectionButton, gbc);
-
         // Add the sub panel to the main panel
         attachmentPanel.add(subPanel);
 
+        updateAttachmentList(selectAttachmentButton);
         return attachmentPanel;
     }
 
+
+    /**
+     * Takes a {@link JPanel} and fills it with the list of all {@link Webhook}s in the selected {@link
+     * net.dv8tion.jda.api.entities.Guild}. This method is asynchronous.
+     */
+    public void updateAttachmentList(JButton addButton) {
+        // Create GBC for formatting
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+
+        // Remove all components from the JPanel
+        attachmentListPanel.removeAll();
+
+        // Add filler JPanel
+        JPanel filler = new JPanel();
+        filler.setOpaque(false);
+        attachmentListPanel.add(filler, gbc);
+
+        // Update GBC constraints
+        gbc.insets = new Insets(10, 10, 0, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weighty = GridBagConstraints.RELATIVE;
+
+        // Add the "Add Attachment" button
+        attachmentListPanel.add(addButton, gbc, 0);
+
+        // Go through the list of attachments and add them to the JPanel
+        if (attachments.size() > 0)
+            for (int i = attachments.size() - 1; i >= 0; i--)
+                attachmentListPanel.add(createAttachmentPanel(attachments.get(i), i, addButton), gbc, 0);
+
+        getContentPane().validate();
+        getContentPane().repaint();
+    }
+
+    /**
+     * Creates the {@link JPanel} containing the information on an attachment to the {@link Webhook Webhook's} message
+     *
+     * @param attachment             The {@link File} that is attached
+     * @param pos                    The position in the {@link #attachments} list
+     * @param selectAttachmentButton The {@link JButton} for adding attachments. Used so it isn't continuously created
+     * @return The {@link JPanel} created
+     */
+    private JPanel createAttachmentPanel(File attachment, int pos, JButton selectAttachmentButton) {
+        // Create base panel
+        JPanel attachmentPanel = new JPanel(new GridBagLayout());
+        attachmentPanel.setBackground(DARK_GRAY);
+        setHoverBrightnessChange(attachmentPanel, .25f);
+        attachmentPanel.setBorder(new RoundedBorder(NOT_QUITE_BLACK, 2, 16));
+        attachmentPanel.setPreferredSize(new Dimension(0, 75));
+
+        // Create filed for file name
+        JTextField name = new JTextField(attachment.getAbsolutePath());
+        name.setEnabled(false);
+        name.setOpaque(false);
+        name.setFont(new Font("Calibri", Font.PLAIN, 24));
+        name.setHorizontalAlignment(JTextField.CENTER);
+        name.setBorder(BorderFactory.createEmptyBorder());
+        name.setForeground(WHITE);
+
+        // Create the JScrollPane for the name field
+        JScrollPane nameScroll = new JScrollPane(name);
+        nameScroll.setBorder(BorderFactory.createEmptyBorder());
+        nameScroll.setOpaque(false);
+        nameScroll.getViewport().setOpaque(false);
+        nameScroll.setPreferredSize(new Dimension(0, 75));
+
+        // JScrollBar formatting for the name field
+        JScrollBar horizontalBar = nameScroll.getHorizontalScrollBar();
+        horizontalBar.setPreferredSize(new Dimension(0, 10));
+        standardizeScrollbar(horizontalBar);
+
+        JScrollBar verticalBar = nameScroll.getVerticalScrollBar();
+        verticalBar.setPreferredSize(new Dimension(0, 10));
+        standardizeScrollbar(verticalBar);
+
+        // Create the "Remove Attachment" button
+        JButton removeSelectionButton = new JButton("Remove Attachment");
+        removeSelectionButton.setBackground(RED);
+        removeSelectionButton.setForeground(WHITE);
+        removeSelectionButton.setBorder(new RoundedBorder(DARK_GRAY, 0, 16));
+        removeSelectionButton.setFont(new Font("Calibri", Font.BOLD, 24));
+        setHoverBrightnessChange(removeSelectionButton, .25f);
+        removeSelectionButton.setFocusable(false);
+        removeSelectionButton.setPreferredSize(new Dimension(0, 100));
+
+        removeSelectionButton.addActionListener(event -> {
+            attachments.remove(pos);
+            updateAttachmentList(selectAttachmentButton);
+        });
+
+        // Add elements to the attachmentPanel
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weighty = 1;
+        gbc.weightx = .9;
+        attachmentPanel.add(nameScroll, gbc);
+
+        gbc.weightx = .1;
+        gbc.insets = new Insets(0, 10, 0, 0);
+        attachmentPanel.add(removeSelectionButton, gbc);
+
+        return attachmentPanel;
+    }
 }
