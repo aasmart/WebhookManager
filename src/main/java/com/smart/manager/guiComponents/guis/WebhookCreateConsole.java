@@ -84,14 +84,14 @@ public class WebhookCreateConsole extends JFrameEssentials {
         gbc.weightx = .9;
         gbc.gridy = 0;
         gbc.gridx = 0;
-        gbc.insets = new Insets(20, 40, 20, 5);
+        gbc.insets = new Insets(10, 10, 10, 0);
         bottomPanel.add(createWebhook(), gbc);
 
         // Update constraints and add the bottom panel
         gbc.weightx = .1;
         gbc.gridy = 0;
         gbc.gridx = 1;
-        gbc.insets = new Insets(20, 5, 20, 40);
+        gbc.insets = new Insets(10, 10, 10, 10);
         bottomPanel.add(cancel(this), gbc);
         mainConsole.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 

@@ -478,12 +478,12 @@ public class WebhookConsole extends JFrameEssentials {
         // Update constraints and add the "Send Message" button
         gbc.weighty = 1;
         gbc.weightx = .9;
-        gbc.insets = new Insets(20, 50, 20, 5);
+        gbc.insets = new Insets(10, 10, 10, 0);
         buttonPanel.add(sendMessage, gbc);
 
         // Update constraints and add the cancel button
         gbc.weightx = .1;
-        gbc.insets = new Insets(20, 5, 20, 50);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 1;
         buttonPanel.add(cancel(this), gbc);
 
