@@ -44,7 +44,7 @@ public class MainConsole extends JFrameEssentials {
         WebhookGUI.GUI.MAIN_CONSOLE = this;
 
         // Setup basic console
-        setTitle("Webhook Viewer");
+        setTitle("Webhook Manager");
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
