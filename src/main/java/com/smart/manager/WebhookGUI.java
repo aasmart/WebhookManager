@@ -56,7 +56,6 @@ public class WebhookGUI {
         if(token == null || token.length() == 0)
             return;
 
-        new InvalidPermsPopUp("EEE");
         managerProperties = readProperties();
 
         try {
